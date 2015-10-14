@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# cd current dir
+cd "$(dirname "$0")"
+
+python -m SimpleHTTPServer 8888
