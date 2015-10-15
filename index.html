@@ -74,12 +74,14 @@
 
         info.update = function (props) {
 
-            this._div.innerHTML = '<h4>Europa bevolking</h4>' +  (props ?
-                '<b>' + getValue(props) + '</b><br />' + props.population + ' mensen'
+            this._div.innerHTML = '<h4>Europa ongelijkheid</h4>' +  (props ?
+                '<b>' + Math.round(getValue(props)-0.20*100) + 'x zo veel inkomen</b> + ' +  getValue(props) + ' gini <br />' + props.population + ' mensen/m2'
                 : 'Hover over a state');
         };
 
         info.addTo(map);
+
+
 
 
         function getValue (props) {
@@ -105,7 +107,7 @@
                    d > 26   ? '#FD8D3C' :
                    d > 23   ? '#FEB24C' :
                    d > 20   ? '#FED976' :
-                              '#FFEDA0';
+                              'transparent';
         }
 
         function style(feature) {
