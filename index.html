@@ -11,13 +11,22 @@
 <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
 <style>
   body { margin:0; padding:0; }
-  #map { position:absolute; top:0; bottom:0; width:100%; }
+  /*#map { position:absolute; top:0; bottom:0; width:100%; }
+  */
+
+#legenda { position:absolute; top:0; right:0; width:150px; 
+    font-size: 24pt;
+}
+
 </style>
 </head>
 <body>
 
+
+
 <style>
 .menu-ui {
+    display: none;
   position:absolute;
   top:10px;
   right:10px;
@@ -31,6 +40,11 @@ path {
 </style>
 
 <div id='map'></div>
+
+<div id="variablesButton"></div>
+
+<div id="legenda"></div>
+
 <div id='variables' class='menu-ui'></div>
 
 <!-- jQuery is required for this example. -->
@@ -72,16 +86,32 @@ var hues = [
 var variables = [
     'gino',
     'freedom',
-    'inwoners-km2',
     'werkloos-man',
     'werkloos-vrouw',
-    'bpm-per-inwoner'
-
+    'vluchteling-10k-inwoner',
+    'minimumloon-mnd'
     ];
+
+var variablesUI = [
+    'Inkomensongelijkheid-index',
+    'Persvrijheid-index',
+    'Werkloos van de man',
+    'Werkloos van de vrouw',
+    'vluchteling-10000-inwoners',
+    'minimumloon-mnd'
+    ];
+
+
+for (var i = 0; i < variables.length; i++) {
+    document.getElementById("variablesButton").innerHTML += "<button onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</button>";
+}
+
+
 // var variables = [
 //     'B06011002 - Born in state of residence',
 //     'B06011003 - Born in other state of the United States',
 //     'B06011004 - Native; born outside the United States'];
+
 
 
 
@@ -216,19 +246,27 @@ function setVariable(name) {
             fillOpacity: 0.8,
             weight: 0.5
         });
+
+        layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
+
     });
+}
+
+function hoverLegenda (e,those,name) {
+    console.dir(e)
+    console.log(e.target.feature.properties[name])
+
+
+    document.getElementById("legenda").innerHTML = e.target.feature.properties["nl_name"] + " " + e.target.feature.properties[name];
+
 }
 
 
 
 
 
-
-
-
-
-
 </script>
+
 
 </body>
 </html>
