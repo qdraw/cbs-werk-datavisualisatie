@@ -1,64 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset=utf-8 />
+<meta charset="utf-8" />
 <title>Multiple choropleth maps</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src='js/mapbox.js?v=2.2.2'></script>
+<script type="text/javascript" src="js/jquery.js"></script>
 
-<link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
-<style>
-  body { margin:0; padding:0; }
-  /*#map { position:absolute; top:0; bottom:0; width:100%; }
-  */
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
 
-#legenda { position:absolute; top:0; right:0; width:150px; 
-    font-size: 24pt;
-}
-
-</style>
+<link href='css/leaflet.css' rel='stylesheet' />
 </head>
 <body>
 
 
 
-<style>
-.menu-ui {
-    display: none;
-  position:absolute;
-  top:10px;
-  right:10px;
-  }
-
-/* Do a fancy data transition for browsers that support it */
-path {
-  -webkit-transition:fill 200ms;
-          transition:fill 200ms;
-  }
-</style>
-
-<div id='map'></div>
+<div id="map"></div>
 
 <div id="variablesButton"></div>
 
 <div id="legenda"></div>
 
-<div id='variables' class='menu-ui'></div>
-
-<!-- jQuery is required for this example. -->
-<script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
-<script>
+<script type="text/javascript">
 
 L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
-var map = L.mapbox.map('map', 'mapbox.light')
+var map = L.mapbox.map(
+        'map', 'mapbox.light', {zoomControl: false})
     .setView([53, 20], 3);
 
 // Be nice and credit our data source, Census Reporter.
-map.attributionControl.addAttribution('Data from ' +
-  '<a href="http://censusreporter.org/data/map/?table=B06011&geo_ids=040%7C01000US#">' +
-  'Census Reporter</a>');
+// map.attributionControl.addAttribution('Data from ' +
+//   '<a href="http://censusreporter.org/data/map/?table=B06011&geo_ids=040%7C01000US#">' +
+//   'Census Reporter</a>');
 
 
 
@@ -89,21 +63,21 @@ var variables = [
     'werkloos-man',
     'werkloos-vrouw',
     'vluchteling-10k-inwoner',
-    'minimumloon-mnd'
+    'uurloon-gemiddelde'
     ];
 
 var variablesUI = [
-    'Inkomensongelijkheid-index',
-    'Persvrijheid-index',
-    'Werkloos van de man',
-    'Werkloos van de vrouw',
-    'vluchteling-10000-inwoners',
-    'minimumloon-mnd'
+    'Inkomensongelijkheid',
+    'Persvrijheid',
+    'Werkloos mannen',
+    'Werkloos vrouwen',
+    'Vluchteling per 10000 inwoners',
+    'Kosten uurloon per uur'
     ];
 
 
 for (var i = 0; i < variables.length; i++) {
-    document.getElementById("variablesButton").innerHTML += "<button onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</button>";
+    document.getElementById("variablesButton").innerHTML += "<li class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /> <a onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</a> </li>";
 }
 
 
@@ -185,7 +159,7 @@ function joinData(data, layer) {
     }
     for (i = 0; i < data.length; i++) {
 
- // Match the GeoJSON data (byState) with the tabular data
+     // Match the GeoJSON data (byState) with the tabular data
         // (data), replacing the GeoJSON feature properties
         // with the full data.
         try {
@@ -197,9 +171,11 @@ function joinData(data, layer) {
         for (var j = 0; j < variables.length; j++) {
             // Simultaneously build the table of min and max
             // values for each attribute.
+
             var n = variables[j];
             ranges[n].min = Math.min(data[i][n], ranges[n].min);
             ranges[n].max = Math.max(data[i][n], ranges[n].max);
+
         }
     }
     // Create a new GeoJSON array of features and set it
@@ -250,14 +226,91 @@ function setVariable(name) {
         layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
 
     });
+
+    setColorOfVariablesButton (name)
+
+}
+
+
+function setColorOfVariablesButton (name) {
+
+
+    console.log(name);
+
+
+  $( "#variablesButton" ).each(function() {
+    $( this ).css( "backgroundColor", "white" );
+  });
+
+
+    console.log(name);
+
+
+
+    $('#variablesButton').children('li').each(function () {
+        $( this ).css( "backgroundColor", "white" );
+        // alert(this.value); // "this" is the current element in the loop
+    });
+
+    $( "#variablesButton" + " ." + name).css("backgroundColor", "red" );
+
+
 }
 
 function hoverLegenda (e,those,name) {
-    console.dir(e)
-    console.log(e.target.feature.properties[name])
+    // console.dir(e)
+    // console.log(e.target.feature.properties[name])
+
+    if (e.target.feature.properties[name] == -9) {
+        e.target.feature.properties[name] = "geen data"
+    };
 
 
-    document.getElementById("legenda").innerHTML = e.target.feature.properties["nl_name"] + " " + e.target.feature.properties[name];
+    // 'gino',
+    // 'freedom',
+    // 'werkloos-man',
+    // 'werkloos-vrouw',
+    // 'vluchteling-10k-inwoner',
+    // 'uurloon-gemiddelde'
+
+    var scale;
+    switch(name) {
+        case "gino":
+            scale = "percentage van het inkomen is ongelijker dan het europese gemiddelde";
+        break;
+
+        case "freedom":
+            scale = "raking van reporters Without Borders index";
+        break;
+
+        case "werkloos-man":
+            scale = "% van de manelijke bevolking is werkloos";
+        break;
+
+        case "werkloos-vrouw":
+            scale = "% van de vrouwlijke bevolking is werkloos";
+        break;
+
+        case "vluchteling-10k-inwoner":
+            scale = "aantal vluchtelingen per 10000 inwoners (alleen 2015)";
+        break;
+        
+        case "uurloon-gemiddelde":
+            scale = "gemiddelde kosten voor één uur werk in euro's";
+        break;
+
+        default:
+            scale = "%";
+
+    }
+
+    var value = e.target.feature.properties[name];
+    value = Math.round(value);
+
+
+    document.getElementById("legenda").innerHTML = e.target.feature.properties["nl_name"] + " " + value + " " + scale;
+
+
 
 }
 
