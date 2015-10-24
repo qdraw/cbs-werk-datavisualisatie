@@ -518,7 +518,7 @@ function hoverLegenda (e,those,name) {
         // console.log(variables[i]);
 
         var value = e.target.feature.properties[variables[i]];
-        value = Math.round(value);
+        value = Math.floor(value);
         document.querySelector("#legenda .hovercontent").innerHTML += value + variablesScale[variables[i]] + "<br />";
 
     };
@@ -533,7 +533,7 @@ function hoverLegenda (e,those,name) {
 function filterCountry(e,those,name) {
     // name = gini
 
-    console.log(e.target.feature.properties[name]);
+    // console.log(e.target.feature.properties[name]);
    
     var thisCountryScore = e.target.feature.properties[name];
 
@@ -590,7 +590,11 @@ function filterCountry(e,those,name) {
 
         }
         else if  (layer.feature.properties[name] === thisCountryScore) {
-            var color = "#5189B2";
+            var color = "#8AB2A7";
+
+            if (layer.feature.properties["name"] === e.target.feature.properties["name"]) {
+                 var color = "#5189B2";
+            };
         }
         else {
 
