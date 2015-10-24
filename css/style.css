@@ -4,6 +4,16 @@
     width: 100vw;
     height: 100vh;
 }
+#variablesButton {
+    z-index: 1;
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
 #variablesButton #hamburger {
     display: block;
     width: 50px;
@@ -13,15 +23,7 @@
     background-size: cover;
 
 }
-#variablesButton {
-    z-index: 1;
-    position:absolute; 
-    top:0; 
-    left:0; 
-    width: 100%;
-    height: 100%;
-    
-}
+
 
 #variablesButton li {
     display: inline-block; 
@@ -47,6 +49,25 @@
     line-height: 100px;
 }
 
+#header {
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width: 100%;
+    width: 82vw;
+    height: 50px;
+    background-color: red;
+}
+
+#header .content {
+    margin-top: 10px;
+    margin-left: 50px;
+    padding-left: 50px;
+    font-size: 20pt;
+    font-family: sans-serif;
+}
+
+
 
 /* Do a fancy data transition for browsers that support it */
 path {
@@ -59,16 +80,27 @@ path {
 #legenda { 
     position:absolute; 
     top:0; 
-    margin-top: 50px;
     text-align: right;
     right:0; 
-    width:300px; 
-    font-size: 24pt;
+    width:214px; 
+    width: 18vw;
+    height: 100vh;
+    font-size: 16pt;
 }
 
+#legenda .bestcountry {
+    background-color: rgba(113,160,191,0.5);
+    height: 50vh;
+}
+#legenda .hovercontent {
+    background-color: rgba(255,96,0,0.5); /* FF6000 */
+    height: 50vh;
+}
 
 #legenda img {
-    width: 300px;
+    width: 214px;
+    width: 18vw;
+
     max-height: 300px;
 
 }

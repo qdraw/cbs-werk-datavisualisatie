@@ -6,6 +6,8 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script type="text/javascript" src="js/mapbox.js?v=2.2.2"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="data/countrynames.js"></script>
+
 
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -20,6 +22,11 @@
 
 <div id="variablesButton">
     <a id="hamburger" onclick="metroMode ()"></a>
+    <div class="content"></div>
+</div>
+
+
+<div id="header">
     <div class="content"></div>
 </div>
 
@@ -98,12 +105,12 @@ var variables = [
 
 
 var variablesUI = [
-    'Inkomensongelijkheid',
-    'Persvrijheid',
-    'gemiddeld-inkomen',
-    'jobs-Availa',
-    'werkloosheid!',
-    'discrimi!'
+    'Gelijkheid in inkomen',
+    'Vrijheid en inspraak',
+    'Een hoog inkomen',
+    'Veel werkgelegenheid',
+    'Lage werkloosheid',
+    'Weinig discriminatie'
     ];
 
 
@@ -116,6 +123,15 @@ var variablesIsHighToLow = {
     'discrimi': true
     };
 
+
+var variablesScale = {
+    "gini": "x zo veel verdienen",
+    'freedom': "Persvrijheid score",
+    'gemiddeld-ink': "gemideld inkomen in euro",
+    'jobs-avail': "banen beschikbaar",
+    'werkloosheid': "% werkloos",
+    'discrimi': "discriminatie score"
+    };
 
 for (var i = 0; i < variables.length; i++) {
     document.querySelector("#variablesButton .content").innerHTML += "<li class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /> <a onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</a> </li>";
@@ -289,7 +305,7 @@ function setVariable(name) {
             (scale.max - scale.min)));
 
 
-        console.log(name)
+        // console.log(name)
 
 
 
@@ -347,6 +363,7 @@ function setVariable(name) {
     bestCountry (name)
     setColorOfVariablesButton (name)
     metroMode ()
+    displayCurrentType (name)
 }
 
 
@@ -356,24 +373,25 @@ function bestCountry (name) {
         // console.log(     ranges[name].max )
 
 
-    console.log(variablesIsHighToLow[name])
+    // console.log(countrynames)
 
     if (variablesIsHighToLow[name]) {
         // max is best
-        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
+        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + countrynames[ranges[name].maxname] + " " + ranges[name].max;
     }
     else {
         // min is best
-        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + ranges[name].minname + " " + ranges[name].min;
+        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + countrynames[ranges[name].minname] + " " + ranges[name].min;
 
     }
-
-
-
 
 
 
 }
+
+
+
+
 
 var isMetroOn = true;
 
@@ -396,6 +414,15 @@ function metroMode () {
 
 
 }
+
+function displayCurrentType (name) {
+
+    var name_pos = variables.indexOf(name); 
+    document.querySelector("#header .content").innerHTML = variablesUI[name_pos];
+
+}
+
+
 
 function setColorOfVariablesButton (name) {
 
@@ -446,7 +473,7 @@ function hoverLegenda (e,those,name) {
 
             layer.setStyle({
                 weight: 5,
-                color: '#5189B2',
+                color: '#FF6000',
                 dashArray: '',
                 fillOpacity: 0.7
             });
@@ -459,45 +486,28 @@ function hoverLegenda (e,those,name) {
     // 'vluchteling-10k-inwoner',
     // 'uurloon-gemiddelde'
 
-    var scale;
-    switch(name) {
-        case "gino":
-            scale = "percentage van het inkomen is ongelijker dan het europese gemiddelde";
-        break;
 
-        case "freedom":
-            scale = "raking van reporters Without Borders index";
-        break;
+    // // this country
+    // var value = e.target.feature.properties[name];
+    // value = Math.round(value);
 
-        case "werkloos-man":
-            scale = "% van de manelijke bevolking is werkloos";
-        break;
+    // if (e.target.feature.properties[name] == NaNescaper) {
+    //     value = "geen data"
+    // };
 
-        case "werkloos-vrouw":
-            scale = "% van de vrouwlijke bevolking is werkloos";
-        break;
+    // document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
 
-        case "vluchteling-10k-inwoner":
-            scale = "aantal vluchtelingen per 10000 inwoners (alleen 2015)";
-        break;
-        
-        case "uurloon-gemiddelde":
-            scale = "gemiddelde kosten voor één uur werk in euro's";
-        break;
+    document.querySelector("#legenda .hovercontent").innerHTML = countrynames[e.target.feature.properties["name"]] + "<br />";
 
-        default:
-            scale = "%";
+    for (var i = 0; i < variables.length; i++) {
+        // console.log(variables[i]);
 
-    }
+        var value = e.target.feature.properties[variables[i]];
+        value = Math.round(value);
+        document.querySelector("#legenda .hovercontent").innerHTML += value + variablesScale[variables[i]] + "<br />";
 
-    var value = e.target.feature.properties[name];
-    value = Math.round(value);
-
-    if (e.target.feature.properties[name] == NaNescaper) {
-        value = "geen data"
     };
 
-    document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value + " " + scale;
 
 
 
