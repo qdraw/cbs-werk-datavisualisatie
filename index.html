@@ -77,8 +77,8 @@ var hues = [
     '#00B244',
     '#30E174',
     '#63E193',
-    '#9DE1B7',
-    '#FFCFCD',
+    '#9DE1B7', // groen
+    '#FFCFCD', // rood
     '#502C2A',
     '#501C19',
     '#FF0C00',
@@ -86,6 +86,19 @@ var hues = [
     '#5189B2', // Blue
     '#CCCCCC' // NaN
     ];
+
+
+var goodHues = [
+    '#00B244',
+    '#30E174',
+    '#63E193',
+    '#9DE1B7']
+
+var badHues = [
+    '#FFCFCD', // rood
+    '#502C2A',
+    '#501C19',
+    '#FF0C00']
 
 
 var NaNescaper  = -9;
@@ -358,6 +371,8 @@ function setVariable(name) {
         layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
         layer.addEventListener("mouseout", function(e){ var those = this; resetHighlight(e,those) }, false);
 
+        layer.addEventListener("click", function(e){ var those = this; filterCountry(e,those,name) }, false);
+
     });
 
     bestCountry (name)
@@ -515,7 +530,130 @@ function hoverLegenda (e,those,name) {
 
 
 
+function filterCountry(e,those,name) {
+    // name = gini
 
+    console.log(e.target.feature.properties[name]);
+   
+    var thisCountryScore = e.target.feature.properties[name];
+
+    var scoreList = [];
+    euLayer.eachLayer(function(layer) {
+        scoreList.push(layer.feature.properties[name]);
+    });
+
+
+    var scale = ranges[name];
+
+    function map(value, low1, high1, low2, high2) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+    }
+
+    // console.log("~~~~~~~~~~~~~~~~~~~~~~ "  + badHues.length + " " +  goodHues.length)
+    euLayer.eachLayer(function(layer) {
+
+        if (layer.feature.properties[name] < thisCountryScore) {
+            // landen die het beter doen
+
+            // console.log("beter " + layer.feature.properties[name] )
+
+            
+            if (variablesIsHighToLow[name]) {
+                // console.log("High")
+                var outMin = badHues.length;
+                var outMax = 0;
+
+                var division = Math.floor(
+                    map( layer.feature.properties[name],  scale.max+1,  scale.min-1,  outMax, outMin  )
+                    );
+
+                var color = badHues[division]
+
+           }
+            else {
+                // console.log("low")
+                var outMin = 0;
+                var outMax = goodHues.length;
+
+                var division = Math.floor(
+                    map( layer.feature.properties[name],  scale.max+1,  scale.min-1,  outMax, outMin  )
+                    );
+
+                var color = goodHues[division]
+            }
+
+
+
+
+                // map( layer.feature.properties[name],  21,  4,  4, 0  )
+
+
+        }
+        else if  (layer.feature.properties[name] === thisCountryScore) {
+            var color = "#5189B2";
+        }
+        else {
+
+            
+            if (variablesIsHighToLow[name]) {
+                // console.log("High")
+
+                var outMin = goodHues.length;
+                var outMax = 0
+
+                var division = Math.floor(
+                    map( layer.feature.properties[name],  scale.max+1,  scale.min-1,  outMax, outMin  )
+                    );
+
+                var color = goodHues[division]
+            }
+            else {
+                var outMin = goodHues.length;
+                var outMax = 0;
+
+                var division = Math.floor(
+                    map( layer.feature.properties[name],  scale.min-1,  scale.max+1,  outMin, outMax  )
+                    );
+
+                var color = badHues[division]
+
+            }
+                
+
+
+        }
+
+
+
+        // var division = Math.floor(
+        //     (hues.length - 3) *
+        //     ((layer.feature.properties[name] - scale.min) /
+        //     (scale.max - scale.min)));
+
+
+
+        layer.setStyle({
+            fillColor: color,
+            fillOpacity: 0.8,
+            color: '#666',
+            weight: 0.5
+        });
+    });
+}
+
+
+
+// function median(values) {
+//     // / /https://gist.github.com/caseyjustus/1166258
+//     values.sort( function(a,b) {return a - b;} );
+
+//     var half = Math.floor(values.length/2);
+
+//     if(values.length % 2)
+//         return values[half];
+//     else
+//         return (values[half-1] + values[half]) / 2.0;
+// }
 
 </script>
 
