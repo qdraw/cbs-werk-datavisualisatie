@@ -51,12 +51,33 @@ var map = L.mapbox.map(
 // Choropleth colors from http://colorbrewer2.org/
 // You can choose your own range (or different number of colors)
 // and the code will compensate.
+
+// // negatief
+// var hues = [
+//     '#FF0C00',
+//     '#501C19',
+//     '#502C2A',
+//     '#FFCFCD',
+//     '#9DE1B7',       
+//     '#63E193',
+//     '#30E174',
+//     '#00B244'];  
+
 var hues = [
-    '#eff3ff',
-    '#bdd7e7',
-    '#6baed6',
-    '#3182bd',
-    '#08519c'];
+    '#00B244',
+    '#30E174',
+    '#63E193',
+    '#9DE1B7',
+    '#FFCFCD',
+    '#502C2A',
+    '#501C19',
+    '#FF0C00',
+    '#CCCCCC'
+    ];
+
+
+var NaNescaper  = -9;
+
 
 // The names of variables that we'll show in the UI for
 // styling. These need to match exactly.
@@ -215,18 +236,25 @@ function setVariable(name) {
         // place between min & max, and choosing a particular
         // color as index.
         var division = Math.floor(
-            (hues.length - 1) *
+            (hues.length - 2) *
             ((layer.feature.properties[name] - scale.min) /
             (scale.max - scale.min)));
+
+        if (layer.feature.properties[name] === NaNescaper) {
+            var division = hues.length - 1;
+        };
+
         // See full path options at
         // http://leafletjs.com/reference.html#path
         layer.setStyle({
             fillColor: hues[division],
             fillOpacity: 0.8,
+            color: '#666',
             weight: 0.5
         });
 
         layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
+        layer.addEventListener("mouseout", function(e){ var those = this; resetHighlight(e,those) }, false);
 
     });
 
@@ -235,7 +263,7 @@ function setVariable(name) {
     metroMode ()
 }
 
-var isMetroOn = false;
+var isMetroOn = true;
 
 function metroMode () {
     if (isMetroOn == true) {
@@ -262,26 +290,54 @@ function setColorOfVariablesButton (name) {
 
 
 
-    $( "#variablesButton" ).each(function() {
+    $( "#variablesButton .content" ).each(function() {
         $( this ).css( "backgroundColor", "white" );
     });
 
 
-    $('#variablesButton').children('li').each(function () {
+    $('#variablesButton .content').children('li').each(function () {
         $( this ).css( "backgroundColor", "white" );
         // alert(this.value); // "this" is the current element in the loop
     });
 
-    $( "#variablesButton" + " ." + name).css("backgroundColor", "red" );
+    $( "#variablesButton .content " + " ." + name).css("backgroundColor", "red" );
 
 
 }
+
+function resetHighlight(e,those) {
+    console.log("reset")
+    console.log(e.target)
+
+        var layer = e.target;
+
+            layer.setStyle({
+                weight: 0.5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
+
+
+    // euLayer.resetStyle(e.target);
+}
+
 
 function hoverLegenda (e,those,name) {
     // console.dir(e)
     // console.log(e.target.feature.properties[name])
 
+    // e.fill = "#555555";
+    // e.layer.options.fillColor = "#515555"
 
+        var layer = e.target;
+
+            layer.setStyle({
+                weight: 5,
+                color: '#666',
+                dashArray: '',
+                fillOpacity: 0.7
+            });
 
 
     // 'gino',
@@ -325,7 +381,7 @@ function hoverLegenda (e,those,name) {
     var value = e.target.feature.properties[name];
     value = Math.round(value);
 
-    if (e.target.feature.properties[name] == -9) {
+    if (e.target.feature.properties[name] == NaNescaper) {
         value = "geen data"
     };
 
