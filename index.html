@@ -23,7 +23,10 @@
     <div class="content"></div>
 </div>
 
-<div id="legenda"></div>
+<div id="legenda">
+    <div class="bestcountry"></div>
+    <div class="hovercontent"></div>
+</div>
 
 <script type="text/javascript">
 
@@ -181,6 +184,8 @@ function joinData(data, layer) {
         byState[euGeoJSON.features[i].properties.name] =
             euGeoJSON.features[i];
     }
+
+
     for (i = 0; i < data.length; i++) {
 
      // Match the GeoJSON data (byState) with the tabular data
@@ -188,7 +193,6 @@ function joinData(data, layer) {
         // with the full data.
         try {
             byState[data[i].name].properties = data[i];
-
         }
         catch(e){}
 
@@ -197,11 +201,31 @@ function joinData(data, layer) {
             // values for each attribute.
 
             var n = variables[j];
+            // console.log("range")
+            // console.log(ranges[n]);
+            // console.log(data[i][n]);
+
             ranges[n].min = Math.min(data[i][n], ranges[n].min);
             ranges[n].max = Math.max(data[i][n], ranges[n].max);
 
+            // Min / Max Name
+            if (data[i][n] != NaNescaper) {
+                if (data[i][n] === ranges[n].min) {
+                    ranges[n].minname = data[i].name;
+               };
+            };
+            if (data[i][n] === ranges[n].max) {
+                ranges[n].maxname = data[i].name;
+            };
+
+
         }
+
+        bestCountry (variables[0])
+
     }
+
+
     // Create a new GeoJSON array of features and set it
     // as the new usLayer content.
     var newFeatures = [];
@@ -258,9 +282,23 @@ function setVariable(name) {
 
     });
 
-
+    bestCountry (name)
     setColorOfVariablesButton (name)
     metroMode ()
+}
+
+
+function bestCountry (name) {
+        // console.log("ranges!")
+        // console.log(     ranges[name].maxname )
+        // console.log(     ranges[name].max )
+
+
+
+
+    document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
+
+
 }
 
 var isMetroOn = true;
@@ -306,8 +344,8 @@ function setColorOfVariablesButton (name) {
 }
 
 function resetHighlight(e,those) {
-    console.log("reset")
-    console.log(e.target)
+    // console.log("reset")
+    // console.log(e.target)
 
         var layer = e.target;
 
@@ -334,7 +372,7 @@ function hoverLegenda (e,those,name) {
 
             layer.setStyle({
                 weight: 5,
-                color: '#666',
+                color: '#5189B2',
                 dashArray: '',
                 fillOpacity: 0.7
             });
@@ -385,7 +423,7 @@ function hoverLegenda (e,those,name) {
         value = "geen data"
     };
 
-    document.getElementById("legenda").innerHTML = e.target.feature.properties["nl_name"] + " " + value + " " + scale;
+    document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value + " " + scale;
 
 
 
