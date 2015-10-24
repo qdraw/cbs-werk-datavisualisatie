@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# cd current dir
+cd "$(dirname "$0")"
+
+sed 's/,/./g' data.csv > data1.csv
+sed 's/;/,/g' data1.csv > data2.csv
+sed 's/,,/,/g' data2.csv > data3.csv
+sed 's/,,/,/g' data3.csv > data4.csv
+
+/data/web/cbs-werk-datavisualisatie/node_modules/csvtojson/bin/csvtojson data4.csv > data_x.json
+
+rm data1.csv
+rm data2.csv
+rm data3.csv
+# rm data4.csv
+
+
+# https://shancarter.github.io/mr-data-converter/
