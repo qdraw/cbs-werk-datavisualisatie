@@ -91,7 +91,8 @@ var variables = [
     'freedom',
     'gemiddeld-ink',
     'jobs-avail',
-    'werkloosheid'
+    'werkloosheid',
+    'discrimi'
     ];
 // name,nl_name,en_name,gini,absoluut-gino,freedom,absoluut-inwoner-aantal,gemiddeld-ink,jobs-avail,werkloosheid
 
@@ -101,8 +102,19 @@ var variablesUI = [
     'Persvrijheid',
     'gemiddeld-inkomen',
     'jobs-Availa',
-    'werkloosheid!'
+    'werkloosheid!',
+    'discrimi!'
     ];
+
+
+var variablesIsHighToLow = {
+    "gini": false,
+    'freedom': false,
+    'gemiddeld-ink': true,
+    'jobs-avail': true,
+    'werkloosheid': false,
+    'discrimi': true
+    };
 
 
 for (var i = 0; i < variables.length; i++) {
@@ -223,7 +235,17 @@ function joinData(data, layer) {
 
         }
 
-        bestCountry (variables[0])
+        if (variablesIsHighToLow[name]) {
+            // max is best
+            bestCountry (variables[0])
+
+        }
+        else {
+            // min is best
+            bestCountry (variables[variables.length-1])
+
+        }
+
 
     }
 
@@ -266,13 +288,47 @@ function setVariable(name) {
             ((layer.feature.properties[name] - scale.min) /
             (scale.max - scale.min)));
 
+
+        console.log(name)
+
+
+
+
+        if (variablesIsHighToLow[name]) {
+            // console.log("max is best")
+
+           // negative
+            var divisionNeg = division * -1;
+            division = (hues.length - 3) + divisionNeg;
+
+
+            // max is best
+            if (layer.feature.properties[name] === scale.max) {
+                var division = hues.length - 2;
+            };
+
+
+        }
+        else {
+            // min is best
+            // console.log("min is best")
+
+
+            if (layer.feature.properties[name] === scale.min) {
+                    var division = hues.length - 2;
+            };            
+
+        }
+
+
+
+
+
+
         if (layer.feature.properties[name] === NaNescaper) {
             var division = hues.length - 1;
         };
 
-        if (layer.feature.properties[name] === scale.min) {
-            var division = hues.length - 2;
-        };
 
         // See full path options at
         // http://leafletjs.com/reference.html#path
@@ -300,12 +356,21 @@ function bestCountry (name) {
         // console.log(     ranges[name].max )
 
 
+    console.log(variablesIsHighToLow[name])
 
-    // max is best
-    // document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
+    if (variablesIsHighToLow[name]) {
+        // max is best
+        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
+    }
+    else {
+        // min is best
+        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + ranges[name].minname + " " + ranges[name].min;
 
-    // min is best
-    document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + ranges[name].minname + " " + ranges[name].min;
+    }
+
+
+
+
 
 
 }
