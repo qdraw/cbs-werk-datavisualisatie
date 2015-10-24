@@ -75,7 +75,9 @@ var hues = [
     '#502C2A',
     '#501C19',
     '#FF0C00',
-    '#CCCCCC'
+
+    '#5189B2', // Blue
+    '#CCCCCC' // NaN
     ];
 
 
@@ -87,16 +89,19 @@ var NaNescaper  = -9;
 var variables = [
     'gini',
     'freedom',
-    'absoluut-inwoner-aantal',
-    'gemiddeld-ink'
+    'gemiddeld-ink',
+    'jobs-avail',
+    'werkloosheid'
     ];
+// name,nl_name,en_name,gini,absoluut-gino,freedom,absoluut-inwoner-aantal,gemiddeld-ink,jobs-avail,werkloosheid
+
 
 var variablesUI = [
     'Inkomensongelijkheid',
     'Persvrijheid',
-    'absoluut-inwoner-aantal',
-    'gemiddeld-inkomen'
-
+    'gemiddeld-inkomen',
+    'jobs-Availa',
+    'werkloosheid!'
     ];
 
 
@@ -257,12 +262,16 @@ function setVariable(name) {
         // place between min & max, and choosing a particular
         // color as index.
         var division = Math.floor(
-            (hues.length - 2) *
+            (hues.length - 3) *
             ((layer.feature.properties[name] - scale.min) /
             (scale.max - scale.min)));
 
         if (layer.feature.properties[name] === NaNescaper) {
             var division = hues.length - 1;
+        };
+
+        if (layer.feature.properties[name] === scale.min) {
+            var division = hues.length - 2;
         };
 
         // See full path options at
@@ -292,8 +301,11 @@ function bestCountry (name) {
 
 
 
+    // max is best
+    // document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
 
-    document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + ranges[name].maxname + " " + ranges[name].max;
+    // min is best
+    document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + ranges[name].minname + " " + ranges[name].min;
 
 
 }
