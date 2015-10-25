@@ -60,65 +60,54 @@ var map = L.map('map',{ zoomControl:false })
 //   '<a href="http://censusreporter.org/data/map/?table=B06011&geo_ids=040%7C01000US#">' +
 //   'Census Reporter</a>');
 
-
-
-
-
-
-
-
-
+// By the way, thanks: https://www.mapbox.com/mapbox.js/example/v1.0.0/choropleth-joined-data-multiple-variables/ for letting me copy paste this example
 
 
 
 // Choropleth colors from http://colorbrewer2.org/
 // You can choose your own range (or different number of colors)
 // and the code will compensate.
+// Didn't use anyway ;)
 
-// // negatief
-// var hues = [
-//     '#FF0C00',
-//     '#501C19',
-//     '#502C2A',
-//     '#FFCFCD',
-//     '#9DE1B7',       
-//     '#63E193',
-//     '#30E174',
-//     '#00B244'];  
 
 var hues = [
-    '#00B244',
+    '#00B244', // green
     '#30E174',
     '#63E193',
-    '#9DE1B7', // groen
-    '#FFCFCD', // rood
+    '#9DE1B7', // light green
+    '#FFCFCD', // light red
     '#502C2A',
     '#501C19',
-    '#FF0C00',
+    '#FF0C00', // more red
 
     '#5189B2', // Blue
     '#CCCCCC' // NaN
     ];
 
 
+// Positive Hues for filter feature
 var goodHues = [
     '#00B244',
     '#30E174',
     '#63E193',
     '#9DE1B7']
 
+// Negative Hues for filter feature
 var badHues = [
     '#FFCFCD', // rood
     '#502C2A',
     '#501C19',
     '#FF0C00']
 
-
+// NaN escaper feature in data set, if you use NaN the app will crash
 var NaNescaper  = -9;
 
 
 // The names of variables that we'll show in the UI for
 // styling. These need to match exactly.
+
+// Those names are used in the ./data/data.json
+
 var variables = [
     'gini',
     'freedom',
@@ -128,9 +117,8 @@ var variables = [
     'discrimi',
     'corruption'
     ];
-// name,nl_name,en_name,gini,absoluut-gino,freedom,absoluut-inwoner-aantal,gemiddeld-ink,jobs-avail,werkloosheid
 
-
+// UI-names for variables, use the same order
 var variablesUI = [
     'Gelijkheid in inkomen',
     'Vrijheid en inspraak',
@@ -141,7 +129,7 @@ var variablesUI = [
     "Niet nodig om om te kopen"
     ];
 
-
+// Using High to low or reverse
 var variablesIsHighToLow = {
     "gini": false,
     'freedom': false,
@@ -152,7 +140,7 @@ var variablesIsHighToLow = {
     'corruption': true
     };
 
-
+// The scale of the variable
 var variablesScale = {
     "gini": "x zo veel verdienen",
     'freedom': "Persvrijheid score",
@@ -163,22 +151,18 @@ var variablesScale = {
     'corruption': "hoe eerlijk het is"
     };
 
+
+// Display all options in 1 div
 for (var i = 0; i < variables.length; i++) {
     document.querySelector("#variablesButton .content").innerHTML += "<li class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /> <a onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</a> </li>";
 }
-
-
-// var variables = [
-//     'B06011002 - Born in state of residence',
-//     'B06011003 - Born in other state of the United States',
-//     'B06011004 - Native; born outside the United States'];
-
 
 
 
 // Collect the range of each variable over the full set, so
 // we know what to color the brightest or darkest.
 var ranges = {};
+
 var $select = $('<select></select>')
     .appendTo($('#variables'))
     .on('change', function() {
@@ -201,21 +185,6 @@ var euLayer = L.mapbox.featureLayer()
     .addTo(map)
     .on('ready', loadData);
 
-
-// var euLayer = L.mapbox.featureLayer()
-//     .loadURL('data/europe.geo.json')
-//     .addTo(map)
-//     .on('ready', loadData);
-
-  // var statesLayer = L.geoJson(statesData,  {
-  //     style: getStyle,
-  //     onEachFeature: onEachFeature
-  // }).addTo(mapdataviz);
-
-
-    // .loadURL('https://www.mapbox.com/mapbox.js/assets/data/us.geojson')
-
-
 // Grab the spreadsheet of data as JSON. If you have CSV
 // data, you should convert it to JSON with
 // http://shancarter.github.io/mr-data-converter/
@@ -225,11 +194,9 @@ function loadData() {
             joinData(data, euLayer);
         });
 }
-//     $.getJSON('https://www.mapbox.com/mapbox.js/assets/data/censusdata.json')
-
 
 function joinData(data, layer) {
-    // First, get the US state GeoJSON data for reference.
+    // First, get the Europian state GeoJSON data for reference.
 
     var euGeoJSON = euLayer.getGeoJSON(),
         byState = {};
@@ -239,8 +206,6 @@ function joinData(data, layer) {
     // that we'll use to join on.
     for (var i = 0; i < euGeoJSON.features.length; i++) {
         
-        // console.log(byState);
-
         byState[euGeoJSON.features[i].properties.name] =
             euGeoJSON.features[i];
     }
@@ -261,14 +226,13 @@ function joinData(data, layer) {
             // values for each attribute.
 
             var n = variables[j];
-            // console.log("range")
-            // console.log(ranges[n]);
-            // console.log(data[i][n]);
 
+            // The minimum
             ranges[n].min = Math.min(data[i][n], ranges[n].min);
             ranges[n].max = Math.max(data[i][n], ranges[n].max);
 
-            // Min / Max Name
+
+            // Min / Max Name for example 'NL'
             if (data[i][n] != NaNescaper) {
                 if (data[i][n] === ranges[n].min) {
                     ranges[n].minname = data[i].name;
@@ -281,6 +245,7 @@ function joinData(data, layer) {
 
         }
 
+        // using in reverse or first gear?
         if (variablesIsHighToLow[name]) {
             // max is best
             bestCountry (variables[0])
@@ -329,36 +294,26 @@ function setVariable(name) {
         // Decide the color for each state by finding its
         // place between min & max, and choosing a particular
         // color as index.
+        // This is like the arduino map feature
         var division = Math.floor(
             (hues.length - 3) *
             ((layer.feature.properties[name] - scale.min) /
             (scale.max - scale.min)));
 
 
-        // console.log(name)
-
-
-
-
         if (variablesIsHighToLow[name]) {
-            // console.log("max is best")
 
-           // negative
+            // higher is beter
+
             var divisionNeg = division * -1;
             division = (hues.length - 3) + divisionNeg;
 
-
-            // max is best
             if (layer.feature.properties[name] === scale.max) {
                 var division = hues.length - 2;
             };
-
-
         }
         else {
-            // min is best
-            // console.log("min is best")
-
+            // lower is beter
 
             if (layer.feature.properties[name] === scale.min) {
                     var division = hues.length - 2;
@@ -366,11 +321,7 @@ function setVariable(name) {
 
         }
 
-
-
-
-
-
+        // Give the NaN a grey colour
         if (layer.feature.properties[name] === NaNescaper) {
             var division = hues.length - 1;
         };
@@ -385,9 +336,9 @@ function setVariable(name) {
             weight: 0.5
         });
 
+        // YEAH, eventListeners
         layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
         layer.addEventListener("mouseout", function(e){ var those = this; resetHighlight(e,those) }, false);
-
         layer.addEventListener("click", function(e){ var those = this; filterCountry(e,those,name) }, false);
 
     });
@@ -399,13 +350,10 @@ function setVariable(name) {
 }
 
 
+
+
 function bestCountry (name) {
-        // console.log("ranges!")
-        // console.log(     ranges[name].maxname )
-        // console.log(     ranges[name].max )
-
-
-    // console.log(countrynames)
+    // Show in the div the best country
 
     if (variablesIsHighToLow[name]) {
         // max is best
@@ -423,7 +371,7 @@ function bestCountry (name) {
 
 
 
-
+/// Metro === the menu behind the hamburger
 
 var isMetroOn = true;
 
@@ -447,6 +395,7 @@ function metroMode () {
 
 }
 
+// Display the current type (for example gino)
 function displayCurrentType (name) {
 
     var name_pos = variables.indexOf(name); 
@@ -455,9 +404,8 @@ function displayCurrentType (name) {
 }
 
 
-
+// In the MEtro interface
 function setColorOfVariablesButton (name) {
-
 
 
 
@@ -476,50 +424,34 @@ function setColorOfVariablesButton (name) {
 
 }
 
+// Caled by the eventlistener mouseout
 function resetHighlight(e,those) {
-    // console.log("reset")
-    // console.log(e.target)
 
         var layer = e.target;
 
-            layer.setStyle({
-                weight: 0.5,
-                color: '#666',
-                dashArray: '',
-                fillOpacity: 0.7
-            });
+        layer.setStyle({
+            weight: 0.5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
 
-
-    // euLayer.resetStyle(e.target);
 }
 
 
+// Showing the legenda in a div
 function hoverLegenda (e,those,name) {
-    // console.dir(e)
-    // console.log(e.target.feature.properties[name])
 
-    // e.fill = "#555555";
-    // e.layer.options.fillColor = "#515555"
+    var layer = e.target;
 
-        var layer = e.target;
+    layer.setStyle({
+        weight: 5,
+        color: '#FF6000',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
 
-            layer.setStyle({
-                weight: 5,
-                color: '#FF6000',
-                dashArray: '',
-                fillOpacity: 0.7
-            });
-
-
-    // 'gino',
-    // 'freedom',
-    // 'werkloos-man',
-    // 'werkloos-vrouw',
-    // 'vluchteling-10k-inwoner',
-    // 'uurloon-gemiddelde'
-
-
-    // // this country
+    // // Only this type (for example gino)
     // var value = e.target.feature.properties[name];
     // value = Math.round(value);
 
@@ -529,6 +461,8 @@ function hoverLegenda (e,those,name) {
 
     // document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
 
+
+    // All types (for example gino)
     document.querySelector("#legenda .hovercontent").innerHTML = countrynames[e.target.feature.properties["name"]] + "<br />";
 
     for (var i = 0; i < variables.length; i++) {
@@ -540,44 +474,41 @@ function hoverLegenda (e,those,name) {
 
     };
 
-
-
-
 }
 
 
 
 function filterCountry(e,those,name) {
 
+    // The popup
     openCountryPopup(e,those,name)
 
-    // name = gini
 
-    // console.log(e.target.feature.properties[name]);
-   
     var thisCountryScore = e.target.feature.properties[name];
 
+    // Create an array of all scores of this type
     var scoreList = [];
     euLayer.eachLayer(function(layer) {
         scoreList.push(layer.feature.properties[name]);
     });
 
 
+    // Call for this scale in ranges
     var scale = ranges[name];
 
+    // Yeah here we go again http://eelslap.com/
     function map(value, low1, high1, low2, high2) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
     }
 
-    // console.log("~~~~~~~~~~~~~~~~~~~~~~ "  + badHues.length + " " +  goodHues.length)
+    // Loop though all layers in the leaflet map
+    // filter for countries who are better, the same or worse
     euLayer.eachLayer(function(layer) {
 
         if (layer.feature.properties[name] < thisCountryScore) {
-            // landen die het beter doen
+            // Countries who perform better! :D :D :D
 
-            // console.log("beter " + layer.feature.properties[name] )
-
-            
+            // And again the higer is better            
             if (variablesIsHighToLow[name]) {
                 // console.log("High")
                 var outMin = badHues.length;
@@ -590,8 +521,9 @@ function filterCountry(e,those,name) {
                 var color = badHues[division]
 
            }
+
+            // Lower is better            
             else {
-                // console.log("low")
                 var outMin = 0;
                 var outMax = goodHues.length;
 
@@ -603,21 +535,21 @@ function filterCountry(e,those,name) {
             }
 
 
-
-
-                // map( layer.feature.properties[name],  21,  4,  4, 0  )
-
-
         }
+        // Countries have the same value
         else if  (layer.feature.properties[name] === thisCountryScore) {
+            // Some green
             var color = "#8AB2A7";
 
+            // The selected country
             if (layer.feature.properties["name"] === e.target.feature.properties["name"]) {
-                 var color = "#5189B2";
+                 var color = "#5189B2"; // blue
             };
         }
+        // Countries who are worse :( :( :( :( :(
         else {
 
+            // And again the higer is better            
             
             if (variablesIsHighToLow[name]) {
                 // console.log("High")
@@ -631,6 +563,7 @@ function filterCountry(e,those,name) {
 
                 var color = goodHues[division]
             }
+            // Lower is better            
             else {
                 var outMin = goodHues.length;
                 var outMax = 0;
@@ -647,48 +580,27 @@ function filterCountry(e,those,name) {
 
         }
 
-
-
-        // var division = Math.floor(
-        //     (hues.length - 3) *
-        //     ((layer.feature.properties[name] - scale.min) /
-        //     (scale.max - scale.min)));
-
-
-
+        // And finaly arange all the colours from all countries
         layer.setStyle({
             fillColor: color,
             fillOpacity: 0.8,
             color: '#666',
             weight: 0.5
         });
+
     });
 }
 
 
 
-// function median(values) {
-//     // / /https://gist.github.com/caseyjustus/1166258
-//     values.sort( function(a,b) {return a - b;} );
-
-//     var half = Math.floor(values.length/2);
-
-//     if(values.length % 2)
-//         return values[half];
-//     else
-//         return (values[half-1] + values[half]) / 2.0;
-// }
-
-
+// The popup feature
 function openCountryPopup(e,those,name) {
-//     document.querySelector("#openCountryPopup").style.left = (e.containerPoint.x - 150) + "px";
-// document.querySelector("#openCountryPopup").style.top = (e.containerPoint.y - 300) + "px";
+    // https://www.mapbox.com/mapbox.js/example/v1.0.0/choropleth/
 
-//     console.log(e)
-      var layer = e.target;
-        popup.setLatLng(e.latlng);
+    var layer = e.target;
+    popup.setLatLng(e.latlng);
 
-        console.log(e.latlng)
+    // console.log(e.latlng)
 
     var content = countrynames[e.target.feature.properties["name"]] + "<br />";
 
