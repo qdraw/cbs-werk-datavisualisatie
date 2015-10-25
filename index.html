@@ -4,9 +4,6 @@
     <meta charset="utf-8" />
     <title>Multiple choropleth maps</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script type="text/javascript" src="js/mapbox.js?v=2.2.2"></script>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="data/countrynames.js"></script>
 
     <link type="text/plain" rel="author" href="../humans.txt" /> 
 
@@ -41,6 +38,14 @@
                       ,                ,::                            
         
 -->
+
+<div class="preloader">
+    <img src="images/preloader.svg" width="100px" height="100px">
+</div>
+
+<script type="text/javascript" src="js/mapbox.js?v=2.2.2"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="data/countrynames.js"></script>
 
 
 <div id="map"></div>
@@ -175,12 +180,12 @@ var variablesScale = {
 
 var variablesExplain = {
     "gini": "De Gini-coëfficiënt wordt meestal gebruikt om de inkomensongelijkheid te meten, maar is geschikt om elke vorm van ongelijkmatige verspreiding te meten. De Gini-coëfficiënt is een getal tussen 0 en 1. De waarde 0 correspondeert hierbij met ‘perfecte gelijkheid’ ",
-    'freedom': "Persvrijheid score",
-    'gemiddeld-ink': "gemideld inkomen in euro",
-    'jobs-avail': "banen beschikbaar",
-    'werkloosheid': "% werkloos",
-    'discrimi': "discriminatie score",
-    'corruption': "hoe eerlijk het is"
+    'freedom': "Een heerlijkheid was een gebied met een eigen heer. Hier en daar evenwel groeide het centrum van die heerlijkheid uit tot een relatief dicht bevolkte agglomeratie, die niet meer zo landelijk was als het zuivere platteland.",
+    'gemiddeld-ink': "gemideld inkomen in euro uitleg over deze thema",
+    'jobs-avail': "banen beschikbaar, uitleg of dit thema",
+    'werkloosheid': "Het aantal werklozen daalde in juli naar 603 duizend. In de afgelopen drie maanden nam de werkloosheid met 22 duizend af. Het aantal werkenden is in deze periode met 14 duizend toegenomen. De werkzame beroepsbevolking telt 8,3 miljoen personen. De werkloosheid kwam hiermee in juli uit op 6,8 procent van de beroepsbevolking. Dit blijkt uit de meest recente cijfers van CBS.",
+    'discrimi': "Discriminatie is het ongelijk behandelen, achterstellen of uitsluiten van mensen op basis van (persoonlijke) kenmerken. Er kan bijvoorbeeld onderscheid worden gemaakt op afkomst, sekse, huidskleur, seksuele voorkeur, leeftijd, religie, handicap of chronische ziekte.",
+    'corruption': "Corruptie is het politieke, sociale of economische verschijnsel waarbij iemand in een machtspositie ongeoorloofde gunsten verleent in ruil voor wederdiensten of als vriendendienst."
     };
 
 
@@ -400,10 +405,13 @@ function setVariable(name) {
     setColorOfVariablesButton (name)
     metroMode ()
     displayCurrentType (name)
+    hidePreloader()
 }
 
 
-
+function hidePreloader () {
+    document.querySelector(".preloader").style.zIndex = "-1";
+}
 
 function bestCountry (name) {
     // Show in the div the best country

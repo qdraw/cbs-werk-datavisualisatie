@@ -17,7 +17,12 @@ body {
     -webkit-print-color-adjust:exact;
 }
 
-
+.preloader {
+    position:absolute; 
+    top:48%; 
+    left:48%; 
+    z-index:2;
+}
 
 p,
 h1,
