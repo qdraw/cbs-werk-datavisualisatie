@@ -1,0 +1,33 @@
+                      ,                                  
+                     ,:                                  
+      ,:==++=~,      :~                                  
+    ,=+=:::::+?~     ~=                 ,,                  
+   ~+~:~==++=,,~,    ~=                :==:   ,=~,       ,   
+  ==,~      :~,      ~~       ~??~     :~ =:   :I=      ,,        
+ ~~=,        ==,    ,~II    :?$+=?=:      ?,   ++:     ;;  
+,==~~      ,,,   ,?Z$7ZI:  ,I$,  ~?:   +$$=,  ,+?,+= ,:;  
+ =+:     ,,,:  ,7Z: ,~=,   =I?~,+7   ,=$~,=I~   +I~77 ~:,  
+,=~:,   :==~::  ?I~  ,~=,  ,?$Z7$?:  +7:  ~I~   +$I==I=:   
+,=~:~:,:~=++,  ,I?:  ,=?:  :I7+~~:  ,?7:,~++,   =$I :I+,   
+ ,==::::::+?=~  ~II,,=II,  ,??: :~~  +?=++I$+   ~7? ,++:   
+   :~::~:, :+?+:  ?II+~:  ,:+~   ,~~  ==~::::,  :+,  :=:   
+            ,=II+:        ,:,    ,~=:                    
+              :=~==                ~=,                   
+                  ,                ,::                            
+	
+
+
+/* TEAM */
+	Design/Development:		Dion van Velde
+	Contact:			dion [at] qdraw [dot] nl
+	Twitter				@QdrawMedia
+	From:				Twello, Gelderland, The Netherlands a.k.a. Holland
+
+
+*/ SITE */
+	Url:				https://qdraw.github.io/cbs-werk-datavisualisatie/
+	Last update:			2015/10/21
+	Language:			Dutch
+	Doctype:			HTML5
+	Standards:			HTML5, CSS3	
+	IDE:				Sublime Text
