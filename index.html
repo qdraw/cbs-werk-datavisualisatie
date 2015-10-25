@@ -35,12 +35,25 @@
     <div class="hovercontent"></div>
 </div>
 
+<div id="openCountryPopup">
+    
+</div>
+
+
 <script type="text/javascript">
 
 L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
-var map = L.mapbox.map(
-        'map', 'mapbox.light', {zoomControl: false})
+// Replace 'mapbox.streets' with your map id.
+var mapboxTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
+    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+});
+
+
+var map = L.map('map',{ zoomControl:false })
+    .addLayer(mapboxTiles)
     .setView([53, 20], 3);
+
+  var popup = new L.Popup({ autoPan: false });
 
 // Be nice and credit our data source, Census Reporter.
 // map.attributionControl.addAttribution('Data from ' +
@@ -535,6 +548,9 @@ function hoverLegenda (e,those,name) {
 
 
 function filterCountry(e,those,name) {
+
+    openCountryPopup(e,those,name)
+
     // name = gini
 
     // console.log(e.target.feature.properties[name]);
@@ -662,6 +678,35 @@ function filterCountry(e,those,name) {
 //     else
 //         return (values[half-1] + values[half]) / 2.0;
 // }
+
+
+function openCountryPopup(e,those,name) {
+//     document.querySelector("#openCountryPopup").style.left = (e.containerPoint.x - 150) + "px";
+// document.querySelector("#openCountryPopup").style.top = (e.containerPoint.y - 300) + "px";
+
+//     console.log(e)
+      var layer = e.target;
+        popup.setLatLng(e.latlng);
+
+        console.log(e.latlng)
+
+    var content = countrynames[e.target.feature.properties["name"]] + "<br />";
+
+    for (var i = 0; i < variables.length; i++) {
+        // console.log(variables[i]);
+
+        var value = e.target.feature.properties[variables[i]];
+        value = Math.floor(value);
+        content += value + variablesScale[variables[i]] + "<br />";
+
+    };
+
+
+    popup.setContent(content);
+
+    if (!popup._map) popup.openOn(map);
+
+}
 
 </script>
 
