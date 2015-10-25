@@ -46,22 +46,17 @@
 <div id="map"></div>
 
 <div id="variablesButton">
-    <a id="hamburger" onclick="metroMode ()"></a>
+    <h1 class="head"> Kies wat je het belangrijkste thema vind</h1>
     <div class="content"></div>
 </div>
 
+<div id="sidebar">
+    <div id="header"></div>
+    <div id="content">
+    </div>
 
-<div id="header">
-    <div class="content"></div>
-</div>
-
-<div id="legenda">
-    <div class="bestcountry"></div>
-    <div class="hovercontent"></div>
-</div>
-
-<div id="openCountryPopup">
-    
+    <div id="legenda">
+    </div>
 </div>
 
 
@@ -70,7 +65,7 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
 // Replace 'mapbox.streets' with your map id.
 var mapboxTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
-    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    attribution: '<a href="source.html" target="_blank">Bronvermelding</a>'
 });
 
 
@@ -78,7 +73,7 @@ var map = L.map('map',{ zoomControl:false })
     .addLayer(mapboxTiles)
     .setView([53, 20], 3);
 
-  var popup = new L.Popup({ autoPan: false });
+var popup = new L.Popup({ autoPan: false });
 
 // Be nice and credit our data source, Census Reporter.
 // map.attributionControl.addAttribution('Data from ' +
@@ -123,6 +118,15 @@ var badHues = [
     '#502C2A',
     '#501C19',
     '#FF0C00']
+
+
+$( "#sidebar #legenda" ).append("      <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>");
+
+for (var i = 0; i < hues.length-2; i++) {
+    console.log(hues[i])
+    $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+};
+
 
 // NaN escaper feature in data set, if you use NaN the app will crash
 var NaNescaper  = -9;
@@ -176,10 +180,24 @@ var variablesScale = {
     'corruption': "hoe eerlijk het is"
     };
 
+var variablesExplain = {
+    "gini": "De Gini-coëfficiënt wordt meestal gebruikt om de inkomensongelijkheid te meten, maar is geschikt om elke vorm van ongelijkmatige verspreiding te meten. De Gini-coëfficiënt is een getal tussen 0 en 1. De waarde 0 correspondeert hierbij met ‘perfecte gelijkheid’ ",
+    'freedom': "Persvrijheid score",
+    'gemiddeld-ink': "gemideld inkomen in euro",
+    'jobs-avail': "banen beschikbaar",
+    'werkloosheid': "% werkloos",
+    'discrimi': "discriminatie score",
+    'corruption': "hoe eerlijk het is"
+    };
+
+
+
+
+
 
 // Display all options in 1 div
 for (var i = 0; i < variables.length; i++) {
-    document.querySelector("#variablesButton .content").innerHTML += "<li class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /> <a onclick='setVariable(\"" + variables[i]  + "\")'>" + variablesUI[i] +"</a> </li>";
+    document.querySelector("#variablesButton .content").innerHTML += "<li onclick='setVariable(\"" + variables[i]  + "\")' class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /><span>" + variablesUI[i] +"</span> </li>";
 }
 
 
@@ -362,8 +380,8 @@ function setVariable(name) {
         });
 
         // YEAH, eventListeners
-        layer.addEventListener("mouseover", function(e){ var those = this; hoverLegenda(e,those,name) }, false);
-        layer.addEventListener("mouseout", function(e){ var those = this; resetHighlight(e,those) }, false);
+        layer.addEventListener("mouseover", function(e){ var those = this; mousemove(e,those,name) }, false);
+        layer.addEventListener("mouseout", function(e){ var those = this; mouseout(e,those) }, false);
         layer.addEventListener("click", function(e){ var those = this; filterCountry(e,those,name) }, false);
 
     });
@@ -382,11 +400,11 @@ function bestCountry (name) {
 
     if (variablesIsHighToLow[name]) {
         // max is best
-        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].maxname + ".jpg'/> " + countrynames[ranges[name].maxname] + " " + ranges[name].max;
+        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].maxname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  "ranges == " + ranges[name].max + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
     }
     else {
         // min is best
-        document.querySelector("#legenda .bestcountry").innerHTML = "Goedste land == " + "<img src='images/" + ranges[name].minname + ".jpg'/> " + countrynames[ranges[name].minname] + " " + ranges[name].min;
+        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].minname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].minname + ".jpg)'></div> " +  "ranges == " + ranges[name].min + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
 
     }
 
@@ -402,19 +420,29 @@ var isMetroOn = true;
 
 function metroMode () {
     if (isMetroOn == true) {
-        $( "#variablesButton").css("width", "50px" );
-        $( "#variablesButton").css("height", "50px" );
-        $( "#variablesButton .content").css("display", "none" );
+        $( "#variablesButton").css("width", "100vw" );
+        $( "#variablesButton").css("height", "100vh" );
+
+
+        $( "#variablesButton .content").css("margin-left", "auto" )
+        $( "#variablesButton .content").css("margin-right", "auto" )
+        $( "#variablesButton .content").css("max-width", "960px" )
+
 
         isMetroOn = false;
     }
     else {
-        $( "#variablesButton").css("width", "100vw" );
-        $( "#variablesButton").css("height", "100vh" );        
-        $( "#variablesButton .content").css("display", "block" );
 
-        isMetroOn = true;
+        $( "#variablesButton .head").css("display", "none" );
+        $( "#variablesButton .content").css("width", "inherit" )
 
+        $( "#variablesButton").css("width", "27vw" );
+        $( "#variablesButton").css("height", "48px" );
+        $( "#variablesButton .content img").css("height", "37px" );
+        $( "#variablesButton .content img").css("width", "37px" );
+        $( "#variablesButton .content span").css("display", "none" );
+
+        // dont enable metro again
     }
 
 
@@ -424,7 +452,7 @@ function metroMode () {
 function displayCurrentType (name) {
 
     var name_pos = variables.indexOf(name); 
-    document.querySelector("#header .content").innerHTML = variablesUI[name_pos];
+    document.querySelector("#header").innerHTML = "<h1>" + variablesUI[name_pos] + "</h1>" + "<br />" + variablesExplain[name];
 
 }
 
@@ -432,11 +460,9 @@ function displayCurrentType (name) {
 // In the MEtro interface
 function setColorOfVariablesButton (name) {
 
-
-
-    $( "#variablesButton .content" ).each(function() {
-        $( this ).css( "backgroundColor", "white" );
-    });
+    // $( "#variablesButton .content" ).each(function() {
+    //     $( this ).css( "backgroundColor", "white" );
+    // });
 
 
     $('#variablesButton .content').children('li').each(function () {
@@ -444,7 +470,7 @@ function setColorOfVariablesButton (name) {
         // alert(this.value); // "this" is the current element in the loop
     });
 
-    $( "#variablesButton .content " + " ." + name).css("backgroundColor", "red" );
+    $( "#variablesButton .content " + " ." + name).css("backgroundColor", "#5189B2" );
 
 
 }
@@ -464,49 +490,66 @@ function resetHighlight(e,those) {
 }
 
 
-// Showing the legenda in a div
-function hoverLegenda (e,those,name) {
+function filterCountryInfo (e,those,name) {
 
-    var layer = e.target;
+    var value = e.target.feature.properties[name];
+    value = Math.round(value);
 
-    layer.setStyle({
-        weight: 5,
-        color: '#FF6000',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
-
-    // // Only this type (for example gino)
-    // var value = e.target.feature.properties[name];
-    // value = Math.round(value);
-
-    // if (e.target.feature.properties[name] == NaNescaper) {
-    //     value = "geen data"
-    // };
-
-    // document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
-
-
-    // All types (for example gino)
-    document.querySelector("#legenda .hovercontent").innerHTML = countrynames[e.target.feature.properties["name"]] + "<br />";
-
-    for (var i = 0; i < variables.length; i++) {
-        // console.log(variables[i]);
-
-        var value = e.target.feature.properties[variables[i]];
-        value = Math.floor(value);
-        document.querySelector("#legenda .hovercontent").innerHTML += value + variablesScale[variables[i]] + "<br />";
-
+    if (e.target.feature.properties[name] == NaNescaper) {
+        value = "geen data"
     };
 
+    // document.querySelector("#sidebar #content").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
+
+    var countryname = e.target.feature.properties["name"];
+
+    document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[countryname] + "</h2>" + "<div class='image' style='background-image:url(images/" + countryname + ".jpg)'></div> " +  "score == " + value + "<br /> Een kort verhaaltje over het land waar het nu over gaat, dit land doet het dus bijvoorbeeld bijzonder goed of slecht, geen idee anyway";
+
 }
+
+
+// // Showing the legenda in a div
+// function hoverLegenda (e,those,name) {
+
+//     var layer = e.target;
+
+//     layer.setStyle({
+//         weight: 5,
+//         color: '#FF6000',
+//         dashArray: '',
+//         fillOpacity: 0.7
+//     });
+
+//     // // Only this type (for example gino)
+//     // var value = e.target.feature.properties[name];
+//     // value = Math.round(value);
+
+//     // if (e.target.feature.properties[name] == NaNescaper) {
+//     //     value = "geen data"
+//     // };
+
+//     // document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
+
+
+//     // All types (for example gino)
+//     document.querySelector("#legenda .hovercontent").innerHTML = countrynames[e.target.feature.properties["name"]] + "<br />";
+
+//     for (var i = 0; i < variables.length; i++) {
+//         // console.log(variables[i]);
+
+//         var value = e.target.feature.properties[variables[i]];
+//         value = Math.floor(value);
+//         document.querySelector("#legenda .hovercontent").innerHTML += value + variablesScale[variables[i]] + "<br />";
+
+//     };
+
+// }
 
 
 
 function filterCountry(e,those,name) {
 
-    // The popup
-    openCountryPopup(e,those,name)
+    filterCountryInfo(e,those,name)
 
 
     var thisCountryScore = e.target.feature.properties[name];
@@ -619,31 +662,75 @@ function filterCountry(e,those,name) {
 
 
 // The popup feature
-function openCountryPopup(e,those,name) {
+
+var timer;
+
+function mousemove(e,those,name) {
     // https://www.mapbox.com/mapbox.js/example/v1.0.0/choropleth/
 
     var layer = e.target;
-    popup.setLatLng(e.latlng);
 
-    // console.log(e.latlng)
 
-    var content = countrynames[e.target.feature.properties["name"]] + "<br />";
 
-    for (var i = 0; i < variables.length; i++) {
-        // console.log(variables[i]);
+    layer.setStyle({
+        weight: 5,
+        color: '#FF6000',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
 
-        var value = e.target.feature.properties[variables[i]];
-        value = Math.floor(value);
-        content += value + variablesScale[variables[i]] + "<br />";
 
+
+
+    var newpos = {
+        lat: (e.latlng.lat+1),        
+        lng: (e.latlng.lng),        
+    }
+
+    popup.setLatLng(newpos);
+
+
+    var content = e.target.feature.properties[name];
+    content = Math.round(content);
+
+
+    if (e.target.feature.properties[name] == NaNescaper) {
+        content = "geen data"
     };
 
+     content = countrynames[e.target.feature.properties["name"]] + " <br />" + content + " " + variablesScale[name]
 
-    popup.setContent(content);
 
-    if (!popup._map) popup.openOn(map);
+    // var content = countrynames[e.target.feature.properties["name"]] + "<br />";
 
+    // for (var i = 0; i < variables.length; i++) {
+    //     // console.log(variables[i]);
+
+    //     var value = e.target.feature.properties[variables[i]];
+    //     value = Math.floor(value);
+    //     content += value + variablesScale[variables[i]] + "<br />";
+
+    // };
+
+    timer = window.setTimeout(function() {
+        popup.setContent(content);
+
+        if (!popup._map) popup.openOn(map);
+
+    }, 200);
 }
+
+
+function mouseout(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        fillOpacity: 0.8,
+        color: '#666',
+        weight: 0.5
+    });
+}
+
 
 </script>
 
