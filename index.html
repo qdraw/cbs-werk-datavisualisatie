@@ -71,7 +71,7 @@ var mapboxTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y
 
 var map = L.map('map',{ zoomControl:false })
     .addLayer(mapboxTiles)
-    .setView([53, 20], 3);
+    .setView([55, 13], 4);
 
 var popup = new L.Popup({ autoPan: false });
 
@@ -119,13 +119,6 @@ var badHues = [
     '#501C19',
     '#FF0C00']
 
-
-$( "#sidebar #legenda" ).append("      <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>");
-
-for (var i = 0; i < hues.length-2; i++) {
-    console.log(hues[i])
-    $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-};
 
 
 // NaN escaper feature in data set, if you use NaN the app will crash
@@ -324,7 +317,23 @@ function joinData(data, layer) {
 
 
 
+function legenda (name) {
 
+
+    if (variablesIsHighToLow[name]) {
+        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Lager</span>        <span style='float:left; text-align:right'>Hoger</span>";
+    }
+    else {
+        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Hoger</span>        <span style='float:left; text-align:right'>Lager</span>";
+    }
+
+
+
+    for (var i = 0; i < hues.length-2; i++) {
+        console.log(hues[i])
+        $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+    };
+}
 
 
 // Excuse the short function name: this is not setting a JavaScript
@@ -386,6 +395,7 @@ function setVariable(name) {
 
     });
 
+    legenda (name)
     bestCountry (name)
     setColorOfVariablesButton (name)
     metroMode ()

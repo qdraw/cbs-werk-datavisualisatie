@@ -47,6 +47,9 @@ h2{
 
 }
 
+h3{
+    font-weight: bold;
+}
 
 #map {
     width: 800px;
@@ -173,7 +176,7 @@ path {
 }
 
 #sidebar #legenda span {
-    width: 50%;
+    width: 47%;
 }
 /*#legenda { 
 
