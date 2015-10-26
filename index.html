@@ -173,7 +173,7 @@ var variablesScale = {
     'freedom': "Persvrijheid score in de index",
     'gemiddeld-ink': "gemideld inkomen in euro",
     'jobs-avail': "score in de index",
-    'werkloosheid': "personen werkloos",
+    'werkloosheid': "% werkloos",
     'discrimi': "discriminatie score",
     'corruption': "score in de index"
     };
@@ -187,7 +187,6 @@ var variablesExplain = {
     'discrimi': "Doordat we steeds meer culturen, normen en waardes hebben op de wereld, botsen deze nogal eens met elkaar. Welk land staat juist open voor andere culturen en is openminded? Hier zie je een overzicht van de landen waar je als immigrant het snelst geaccepteerd zal worden door de burgers.",
     'corruption': "Hoe eerlijk is een land? Als je het belangrijk vind dat de regels worden nageleefd en mensen hun afspraken nakomen, dan ben je zeker tegen corruptie. Welke landen knijpen een oogje dicht wanneer jij een briefje van 10 in het borstzakje laat glippen? In welke land kom je weg met moord als je een hoog geplaatst persoon bent?"
     };
-
 
 
 
@@ -335,7 +334,7 @@ function legenda (name) {
 
 
     for (var i = 0; i < hues.length-2; i++) {
-        console.log(hues[i])
+        // console.log(hues[i])
         $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
     };
 }
@@ -418,15 +417,21 @@ function bestCountry (name) {
 
     if (variablesIsHighToLow[name]) {
         // max is best
-        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].maxname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  "ranges == " + ranges[name].max + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
+        // document.querySelector("#sidebar #content").innerHTML = "<h2>" +  + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  "ranges == " +  + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
+
+        var legendascoreExport = filterSearch ("best",name);
+        legendascoreExport = filterReplace (legendascoreExport,ranges[name].max,countrynames[ranges[name].maxname])
+
+        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].maxname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  legendascoreExport;
+
     }
     else {
         // min is best
-        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].minname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].minname + ".jpg)'></div> " +  "ranges == " + ranges[name].min + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
+        var legendascoreExport = filterSearch ("best",name);
+        legendascoreExport = filterReplace (legendascoreExport,ranges[name].min,countrynames[ranges[name].minname])
 
+        document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].minname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].minname + ".jpg)'></div> " +  legendascoreExport;
     }
-
-
 
 }
 
@@ -434,7 +439,7 @@ function bestCountry (name) {
 
 /// Metro === the menu behind the hamburger
 
-var isMetroOn = true;
+var isMetroOn = false;
 
 function metroMode () {
     if (isMetroOn == true) {
@@ -508,6 +513,32 @@ function resetHighlight(e,those) {
 }
 
 
+function filterSearch (searchfor,name) {
+    
+    var legendascoreExport;
+
+    Object.keys(legendascore).forEach(function(key) {
+        if (legendascore[key]["legendascore"] === searchfor) {
+            legendascoreExport = legendascore[key][name];
+
+        };
+    });
+    return legendascoreExport;    
+}
+
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+};
+
+function filterReplace (legendascoreExport,value,fullcountryname) {
+
+    var legendascoreExport = legendascoreExport.replaceAll('[LAND]', fullcountryname);
+    var legendascoreExport = legendascoreExport.replaceAll('[VALUE]', value);
+
+    return legendascoreExport;
+}
+
 function filterCountryInfo (e,those,name) {
 
     var value = e.target.feature.properties[name];
@@ -521,7 +552,58 @@ function filterCountryInfo (e,those,name) {
 
     var countryname = e.target.feature.properties["name"];
 
-    document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[countryname] + "</h2>" + "<div class='image' style='background-image:url(images/" + countryname + ".jpg)'></div> " +  "score == " + value + "<br /> Een kort verhaaltje over het land waar het nu over gaat, dit land doet het dus bijvoorbeeld bijzonder goed of slecht, geen idee anyway";
+
+
+    var legendascoreExport;
+
+    // And again the higer is better            
+    if (variablesIsHighToLow[name]) {
+        if (ranges[name].max/2 < e.target.feature.properties[name]) {
+            var legendascoreExport = filterSearch ("good",name);
+        }
+        else if (ranges[name].max/2 > e.target.feature.properties[name]) {
+            var legendascoreExport = filterSearch ("bad",name);
+        }
+        else {
+            var legendascoreExport = filterSearch ("eq",name);
+        }
+
+        if (ranges[name].maxname === countryname) {
+            var legendascoreExport = filterSearch ("best",name);
+        };
+
+        if (ranges[name].minname === countryname) {
+            var legendascoreExport = filterSearch ("worst",name);
+        };
+    
+    }
+
+    // Lower is better            
+    else {
+        if (ranges[name].max/2 > e.target.feature.properties[name]) {
+            var legendascoreExport = filterSearch ("good",name);
+        }
+        else if (ranges[name].max/2 < e.target.feature.properties[name]) {
+            var legendascoreExport = filterSearch ("bad",name);
+        }
+        else {
+            var legendascoreExport = filterSearch ("eq",name);
+        }
+
+        if (ranges[name].maxname === countryname) {
+            var legendascoreExport = filterSearch ("worst",name);
+        };
+
+        if (ranges[name].minname === countryname) {
+            var legendascoreExport = filterSearch ("best",name);
+        };
+
+    }    
+
+    legendascoreExport = filterReplace (legendascoreExport,value,countrynames[countryname])
+
+
+    document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[countryname] + "</h2>" + "<div class='image' style='background-image:url(images/" + countryname + ".jpg)'></div> " +  legendascoreExport
 
 }
 
@@ -754,6 +836,8 @@ function mouseout(e) {
 
 
 </script>
+
+<script type="text/javascript" src="data/legendascore.js"></script>
 
 
 </body>
