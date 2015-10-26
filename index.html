@@ -169,13 +169,13 @@ var variablesIsHighToLow = {
 
 // The scale of the variable
 var variablesScale = {
-    "gini": "x zo veel verdienen",
-    'freedom': "Persvrijheid score",
+    "gini": "x zo wordt er zo veel verdiend als de armen",
+    'freedom': "Persvrijheid score in de index",
     'gemiddeld-ink': "gemideld inkomen in euro",
-    'jobs-avail': "banen beschikbaar",
-    'werkloosheid': "% werkloos",
+    'jobs-avail': "score in de index",
+    'werkloosheid': "personen werkloos",
     'discrimi': "discriminatie score",
-    'corruption': "hoe eerlijk het is"
+    'corruption': "score in de index"
     };
 
 var variablesExplain = {
@@ -715,6 +715,9 @@ function mousemove(e,those,name) {
     if (e.target.feature.properties[name] == NaNescaper) {
         content = "geen data"
     };
+
+    content = content.toLocaleString()
+    // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 
      content = countrynames[e.target.feature.properties["name"]] + " <br />" + content + " " + variablesScale[name]
 
