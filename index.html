@@ -10,7 +10,9 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
-    <link href="css/leaflet.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/leaflet.css" />
+
+
 </head>
 <body>
 
@@ -47,6 +49,23 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="data/countrynames.js"></script>
 
+
+<div id="intro">
+    <video id="bg-video"
+             poster="data/video.png"
+             loop autoplay>
+             <!-- http://video-js.zencoder.com/oceans-clip.png -->
+        <p>
+            Your browser doesn't support video. Please <a href="http://browsehappy.com/">upgrade your browser</a> to see the example.
+        </p>
+        <source src="data/video.mp4" type="video/mp4">
+        <source src="data/video.webm" type="video/webm">
+    </video>
+
+
+    <h1 class="head"> Wat vind jij het belangrijkste dat een land kan bieden?</h1>
+    <p class="content">Op dit moment vindt er een enorme immigratiestroom plaats. Elke dag komen honderden mensen verschillende landen in Europa binnen in de hoop op een beter leven. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? Binnen deze visualisatie kun jij een kijkje nemen naar de landen van Europa. Welk land past het beste bij jou? </p>
+</div>
 
 <div id="map"></div>
 
@@ -185,7 +204,7 @@ var variablesExplain = {
     'jobs-avail': "Het zou jammer zijn om na zo'n lange reis zonder werk te zitten. Welk land biedt de grootste kans op werk? Waar moeten de handen uit de mouwen worden gestoken en is direct werk te vinden? Wij hebben het uitgezocht!",
     'werkloosheid': "Welke land heeft het minst te kampen met werkloosheid? Waar is de kans het grootst dat jij tijdens de crisis je baan kunt behouden? Spoilers: Vermeid Griekenland, die doen het niet zo goed op dit moment. Maar de rest van West Europa blijft goed stand houden!",
     'discrimi': "Doordat we steeds meer culturen, normen en waardes hebben op de wereld, botsen deze nogal eens met elkaar. Welk land staat juist open voor andere culturen en is openminded? Hier zie je een overzicht van de landen waar je als immigrant het snelst geaccepteerd zal worden door de burgers.",
-    'corruption': "Hoe eerlijk is een land? Als je het belangrijk vind dat de regels worden nageleefd en mensen hun afspraken nakomen, dan ben je zeker tegen corruptie. Welke landen knijpen een oogje dicht wanneer jij een briefje van 10 in het borstzakje laat glippen? In welke land kom je weg met moord als je een hoog geplaatst persoon bent?"
+    'corruption': "Hoe eerlijk is een land? Als je het belangrijk vind dat de regels worden nageleefd en mensen hun afspraken nakomen, dan ben je zeker tegen corruptie. Welke landen knijpen een oogje dicht wanneer jij een briefje van €100 in het borstzakje laat glippen? In welke land kom je weg met moord als je een hoog geplaatst persoon bent?"
     };
 
 
@@ -439,7 +458,7 @@ function bestCountry (name) {
 
 /// Metro === the menu behind the hamburger
 
-var isMetroOn = false;
+var isMetroOn = true;
 
 function metroMode () {
     if (isMetroOn == true) {
@@ -470,6 +489,29 @@ function metroMode () {
 
 
 }
+
+setTimeout(function () {
+    introMode();
+},500)
+
+
+var isIntroOn = true;
+function introMode() {
+
+    if (isIntroOn) {
+        $( "#variablesButton").css("display", "none" );
+        $("#intro .content").append("<a class='button' onclick='isIntroOn = false; introMode()'>Ga verder</a>")
+    }
+    else {
+        $( "#variablesButton").css("display", "block" );
+        $( "#intro").css("display", "none" );
+
+    }
+
+}
+
+
+
 
 // Display the current type (for example gino)
 function displayCurrentType (name) {
