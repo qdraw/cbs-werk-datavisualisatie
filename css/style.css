@@ -21,7 +21,7 @@ body {
     position:absolute; 
     top:48%; 
     left:48%; 
-    z-index:3;
+    z-index:100;
 }
 
 p,
@@ -98,8 +98,8 @@ h3{
 #variablesButton {
     z-index: 1;
     position:absolute; 
-    top:0; 
-    left:0; 
+    top:0px; 
+    left:0px; 
     width: 100%;
     height: 100%;
     background-color: rgba(255,255,255,0.9);
@@ -114,15 +114,11 @@ h3{
     margin-top: 15px;
     margin-bottom: 15px;
 }
-
-
-#variablesButton #hamburger {
-    display: block;
-    width: 50px;
-    height: 50px;
-    background-image: url("../images/hamburger.svg");
-    background-size: cover;
+#variablesButton .head,
+#intro .head {
+    margin-top: 30vh;
 }
+
 
 
 #variablesButton li {
@@ -145,7 +141,6 @@ h3{
 #variablesButton li span{
     float: right;
     margin-left: 5px;
-    line-height: 100px;
 }
 
 #sidebar {
@@ -166,12 +161,12 @@ h3{
     margin-left: 5px;
     margin-right: 5px;
 }
-
 @media (max-width: 1270px) {
     #sidebar #header {
-        margin-top: 115px;
+        margin-top: 100px;
     }
 }
+
 
 
 
@@ -187,7 +182,16 @@ h3{
     background-size: cover;
     background-position: center;
 }
-
+@media (max-height: 638px) and (min-width: 1270px){
+    #sidebar #content .image {
+        height: 10vh;
+    }
+}
+@media (max-height: 560px) and (min-width: 1270px){
+    #sidebar #content .image {
+        display: none;
+    }
+}
 
 
 /* Do a fancy data transition for browsers that support it */
@@ -253,7 +257,9 @@ path {
     pointer-events: none;   
 }
 
-
+.leaflet-control {
+    z-index: -1 !important;
+}
 
 
 .info {
