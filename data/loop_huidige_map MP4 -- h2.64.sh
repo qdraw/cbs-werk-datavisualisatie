@@ -1,0 +1,1 @@
+(for FILE in *.mp4 ; do ffmpeg -i "$FILE" "`basename "$FILE"_conv .mp4`.mp4" || break; done)
