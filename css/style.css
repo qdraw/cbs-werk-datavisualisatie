@@ -119,6 +119,14 @@ h3{
     margin-top: 30vh;
 }
 
+#intro .head,
+#intro .content {
+    text-shadow: 0px 0px 8px #000;
+}
+
+#intro .content .button{
+    text-shadow: 0px 0px 0px #000;
+}
 
 
 #variablesButton li {
