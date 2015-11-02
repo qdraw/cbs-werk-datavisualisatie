@@ -2,7 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Wat vind jij het belangrijkste, op zoek naar een nieuw land?</title>
+    <title>
+        Wat vindt jij het belangrijkste dat een land kan bieden aan zijn inwoners?
+    </title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
     <link type="text/plain" rel="author" href="../humans.txt" /> 
@@ -56,14 +58,16 @@
              loop autoplay>
              <!-- http://video-js.zencoder.com/oceans-clip.png -->
         <p>
-            Your browser doesn't support video. Please <a href="http://browsehappy.com/">upgrade your browser</a> to see the example.
+        Je webbrowser is niet nieuw genoeg, het spijt ons dat het nu 2015 is.
+        Check: <a href="http://browsehappy.com/?locale=nl">om je webbrowser up te daten.</a>
         </p>
         <source src="data/video.mp4" type="video/mp4">
-<!--         <source src="data/video.webm" type="video/webm"> -->
     </video>
 
 
-    <h1 class="head">Wat vind jij het belangrijkste, op zoek naar een nieuw land?</h1>
+    <h1 class="head">
+    Wat vindt jij het belangrijkste dat een land kan bieden aan zijn inwoners?
+</h1>
     <p class="content">Op dit moment vindt er een enorme immigratiestroom plaats in Europa. Elke dag komen honderden mensen uit verschillende landen Europa binnen in de hoop op een betere toekomst. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? 
 
 Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jou past. Wat vind jij belangrijk om een beter leven op te kunnen bouwen? Kortom: Welk land past het beste bij jou? </p>
@@ -168,13 +172,13 @@ var variables = [
 
 // UI-names for variables, use the same order
 var variablesUI = [
-    'Gelijkheid van inkomen en welvaart',
-    'Vrijheid en inspraak',
+    'Gelijkheid in inkomen en welvaart',
+    'Vrijheid en gelijke rechten',
     'Een hoog inkomen',
     'Veel werkgelegenheid',
-    'Lage werkloosheid',
-    'Weinig discriminatie',
-    "Lage corruptie"
+    'Een lage werkloosheid',
+    'Geen discriminatie',
+    "Een eerlijke overheid"
     ];
 
 // Using High to low or reverse
@@ -190,13 +194,13 @@ var variablesIsHighToLow = {
 
 // The scale of the variable
 var variablesScale = {
-    "gini": "x zo wordt er zo veel verdiend als de armen",
-    'freedom': "Persvrijheid score in de index",
-    'gemiddeld-ink': "gemideld inkomen in euro",
-    'jobs-avail': "score in de index",
-    'werkloosheid': "% werkloos",
-    'discrimi': "discriminatie score",
-    'corruption': "score in de index"
+    "gini": "De rijke inwoners hebben [VALUE]x meer koopkracht dan gemiddelde inwoners",
+    'freedom': "[VALUE]/100 onderdrukking vrijheid en inspraak",
+    'gemiddeld-ink': "&euro;[VALUE] gemiddeld aan inkomen",
+    'jobs-avail': "[VALUE]% van de inwoners zijn werkloos",
+    'werkloosheid': "[VALUE]% van de inwoners zijn werkloos",
+    'discrimi': "[VALUE]/100 anti-discriminatie",
+    'corruption': "[VALUE]/100 eerlijkheid van de overheid"
     };
 
 var variablesExplain = {
@@ -662,44 +666,6 @@ function filterCountryInfo (e,those,name) {
 }
 
 
-// // Showing the legenda in a div
-// function hoverLegenda (e,those,name) {
-
-//     var layer = e.target;
-
-//     layer.setStyle({
-//         weight: 5,
-//         color: '#FF6000',
-//         dashArray: '',
-//         fillOpacity: 0.7
-//     });
-
-//     // // Only this type (for example gino)
-//     // var value = e.target.feature.properties[name];
-//     // value = Math.round(value);
-
-//     // if (e.target.feature.properties[name] == NaNescaper) {
-//     //     value = "geen data"
-//     // };
-
-//     // document.querySelector("#legenda .hovercontent").innerHTML = e.target.feature.properties["nl_name"] + " " + value ;
-
-
-//     // All types (for example gino)
-//     document.querySelector("#legenda .hovercontent").innerHTML = countrynames[e.target.feature.properties["name"]] + "<br />";
-
-//     for (var i = 0; i < variables.length; i++) {
-//         // console.log(variables[i]);
-
-//         var value = e.target.feature.properties[variables[i]];
-//         value = Math.floor(value);
-//         document.querySelector("#legenda .hovercontent").innerHTML += value + variablesScale[variables[i]] + "<br />";
-
-//     };
-
-// }
-
-
 
 function filterCountry(e,those,name) {
 
@@ -855,7 +821,16 @@ function mousemove(e,those,name) {
     content = content.toLocaleString()
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 
-     content = countrynames[e.target.feature.properties["name"]] + " <br />" + content + " " + variablesScale[name]
+     content = countrynames[e.target.feature.properties["name"]] + " <br />" +  filterReplace (variablesScale[name],content,countrynames[e.target.feature.properties["name"]])
+
+
+
+    // filterReplace (legendascoreExport,value,fullcountryname)
+
+
+
+
+
 
 
     // var content = countrynames[e.target.feature.properties["name"]] + "<br />";

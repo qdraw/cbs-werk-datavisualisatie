@@ -18,15 +18,21 @@
 
 
 /* TEAM */
+	Data/Storytelling:		Stefan van de Weijer
+	Contact:			info [at]  stefanvandeweijer [dot] nl
+	From:				Sint-Oedenrode, Noord-Brabant, The Netherlands a.k.a. Holland
+	
 	Design/Development:		Dion van Velde
 	Contact:			dion [at] qdraw [dot] nl
 	Twitter				@QdrawMedia
 	From:				Twello, Gelderland, The Netherlands a.k.a. Holland
 
 
+
+
 */ SITE */
 	Url:				https://qdraw.github.io/cbs-werk-datavisualisatie/
-	Last update:			2015/10/21
+	Last update:			2015/11/02
 	Language:			Dutch
 	Doctype:			HTML5
 	Standards:			HTML5, CSS3	

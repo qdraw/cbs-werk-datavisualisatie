@@ -133,6 +133,7 @@ h3{
     display: inline-block; 
     padding: 4px;
     cursor: pointer;
+    text-align: center;
 }
 
 
@@ -144,6 +145,7 @@ h3{
     margin-top: 0px;
     width: 100px;
     height: 100px;
+
 }
 
 #variablesButton li span{
