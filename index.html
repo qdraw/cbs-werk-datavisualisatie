@@ -76,7 +76,7 @@ Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jo
 <div id="map"></div>
 
 <div id="variablesButton">
-    <h1 class="head">    Wat vindt jij het belangrijkste dat een land kan bieden aan zijn inwoners?
+    <h1 class="head">    Wat vind jij het belangrijkste dat een land kan bieden aan zijn inwoners?
     </h1>
     <div class="content"></div>
 </div>
@@ -353,18 +353,32 @@ function legenda (name) {
 
 
     if (variablesIsHighToLow[name]) {
-        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Lager</span>        <span style='float:left; text-align:right'>Hoger</span>";
+        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>";
+
+        for (var i = 0; i < hues.length-2; i++) {
+            // console.log(hues[i])
+            $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+        };
+
+        // for (var i = hues.length-2; i > 0; i--) {
+        //     $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+        // };
+
+
     }
     else {
-        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Hoger</span>        <span style='float:left; text-align:right'>Lager</span>";
+        document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>";
+
+        for (var i = 0; i < hues.length-2; i++) {
+            // console.log(hues[i])
+            $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+        };
+
     }
 
 
 
-    for (var i = 0; i < hues.length-2; i++) {
-        // console.log(hues[i])
-        $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-    };
+
 }
 
 
@@ -534,7 +548,7 @@ function introMode() {
         });
 
 
-        $( "#intro" ).fadeOut( 4000, function() {  
+        $( "#intro" ).fadeOut( 3000, function() {  
             $( "#intro").css("display", "none" );
             $( "#intro #bg-video" ).remove();
         });
