@@ -34,6 +34,8 @@ var countrynames = {
 	"CH":"Zwitserland",
 	"LU":"Luxemburg",
 	"NO":"Noorwegen",
-	"LI":"Liechtenstein"
+	"LI":"Liechtenstein",
+	"AL":"Albanië",
+	"BA":"Bosnië en Herzegovina"
 
 }

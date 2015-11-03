@@ -313,4 +313,8 @@ path {
     background-size: cover; 
 }
 
+.leaflet-container {
+    background-color:rgba(255,0,0,0.0);
+}
+
 

@@ -93,16 +93,18 @@ Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jo
 
 <script type="text/javascript">
 
-L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
+// L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
 // Replace 'mapbox.streets' with your map id.
-var mapboxTiles = L.tileLayer('https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
+var mapboxTiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-base/{z}/{x}/{y}.png' , {
+    maxZoom: 19,
+    opacity: 0.3,
     attribution: '<a href="sources.html" target="_blank">Bronvermelding</a>'
 });
 
 
 var map = L.map('map',{ zoomControl:false })
     .addLayer(mapboxTiles)
-    .setView([55, 13], 4);
+    .setView([55, 0], 4);
 
 var popup = new L.Popup({ autoPan: false });
 
@@ -122,33 +124,33 @@ var popup = new L.Popup({ autoPan: false });
 
 
 var hues = [
-    '#00B244', // green
-    '#30E174',
-    '#63E193',
-    '#9DE1B7', // light green
-    '#FFCFCD', // light red
-    '#502C2A',
-    '#501C19',
-    '#FF0C00', // more red
+    '#64738C', // green green
+    '#889EBB',
+    '#B6D2DE',
+    '#D4EAF2',
+    '#EBC2D0', // light rood
+    '#D994AB',
+    '#E679A3',
+    '#C0537A',
 
-    '#5189B2', // Blue
+    '#e4e8e7', // selected color
     '#CCCCCC' // NaN
     ];
 
 
 // Positive Hues for filter feature
 var goodHues = [
-    '#00B244',
-    '#30E174',
-    '#63E193',
-    '#9DE1B7']
+    '#64738C', // green green
+    '#889EBB',
+    '#B6D2DE',
+    '#D4EAF2'] // light green
 
 // Negative Hues for filter feature
 var badHues = [
-    '#FFCFCD', // rood
-    '#502C2A',
-    '#501C19',
-    '#FF0C00']
+    '#EBC2D0', // light rood
+    '#D994AB',
+    '#E679A3',
+    '#C0537A'] // red red
 
 
 
@@ -552,7 +554,7 @@ function setColorOfVariablesButton (name) {
         // alert(this.value); // "this" is the current element in the loop
     });
 
-    $( "#variablesButton .content " + " ." + name).css("backgroundColor", "#5189B2" );
+    $( "#variablesButton .content " + " ." + name).css("backgroundColor", "red" ); //blue
 
 
 }
@@ -694,6 +696,8 @@ function filterCountry(e,those,name) {
     // filter for countries who are better, the same or worse
     euLayer.eachLayer(function(layer) {
 
+        var borderwidth = 0.5;
+
         if (layer.feature.properties[name] < thisCountryScore) {
             // Countries who perform better! :D :D :D
 
@@ -728,11 +732,12 @@ function filterCountry(e,those,name) {
         // Countries have the same value
         else if  (layer.feature.properties[name] === thisCountryScore) {
             // Some green
-            var color = "#8AB2A7";
+            var color = "#D4EAF2";
 
             // The selected country
             if (layer.feature.properties["name"] === e.target.feature.properties["name"]) {
-                 var color = "#5189B2"; // blue
+                 var color = "#e4e8e7"; // blue
+                 borderwidth = 5;
             };
         }
         // Countries who are worse :( :( :( :( :(
@@ -774,7 +779,7 @@ function filterCountry(e,those,name) {
             fillColor: color,
             fillOpacity: 0.8,
             color: '#666',
-            weight: 0.5
+            weight: borderwidth
         });
 
     });
@@ -793,12 +798,12 @@ function mousemove(e,those,name) {
 
 
 
-    layer.setStyle({
-        weight: 5,
-        color: '#FF6000',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
+    // layer.setStyle({
+    //     weight: 4,
+    //     color: '#FF6000',
+    //     dashArray: '',
+    //     fillOpacity: 0.7
+    // });
 
 
 
@@ -859,8 +864,7 @@ function mouseout(e) {
 
     layer.setStyle({
         fillOpacity: 0.8,
-        color: '#666',
-        weight: 0.5
+        color: '#666'
     });
 }
 
