@@ -36,6 +36,7 @@ var countrynames = {
 	"NO":"Noorwegen",
 	"LI":"Liechtenstein",
 	"AL":"Albanië",
-	"BA":"Bosnië en Herzegovina"
+	"BA":"Bosnië en Herzegovina",
+	"MK":"Macedonië"
 
 }

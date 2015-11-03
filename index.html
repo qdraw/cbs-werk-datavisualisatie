@@ -523,8 +523,22 @@ function introMode() {
     }
     else {
         $( "#variablesButton").css("display", "block" );
-        $( "#intro").css("display", "none" );
-        $( "#intro #bg-video" ).remove();
+        
+
+        $( "#intro .head" ).fadeOut( 1000, function() {  
+            $( "#intro .head").css("display", "none" );
+        });
+
+        $( "#intro .content" ).fadeOut( 1000, function() {  
+            $( "#intro .content").css("display", "none" );
+        });
+
+
+        $( "#intro" ).fadeOut( 4000, function() {  
+            $( "#intro").css("display", "none" );
+            $( "#intro #bg-video" ).remove();
+        });
+        
     }
 
 }
@@ -778,7 +792,7 @@ function filterCountry(e,those,name) {
         layer.setStyle({
             fillColor: color,
             fillOpacity: 0.8,
-            color: '#666',
+            color: '#6f66',
             weight: borderwidth
         });
 
@@ -827,7 +841,7 @@ function mousemove(e,those,name) {
     content = content.toLocaleString()
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 
-     content = countrynames[e.target.feature.properties["name"]] + " <br />" +  filterReplace (variablesScale[name],content,countrynames[e.target.feature.properties["name"]])
+     content = "<b>" +countrynames[e.target.feature.properties["name"]] + "</b> <br />" +  filterReplace (variablesScale[name],content,countrynames[e.target.feature.properties["name"]])
 
 
 
