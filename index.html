@@ -573,7 +573,10 @@ function introMode() {
 
 		$( "#intro" ).fadeOut( 1500, function() {  
 			$( "#intro").css("display", "none" );
-			$( "#intro #bg-video" ).remove();
+            var isFF = !!window.sidebar;
+            if (isFF) {
+                $( "#intro #bg-video" ).remove();
+            };
 		});
 		
 	}
@@ -908,9 +911,12 @@ function mousemove(e,those,name) {
 
 	// }, 200);
 
-    popup.setContent(content);
-    if (!popup._map) popup.openOn(map);
-    window.clearTimeout(closeTooltip);
+
+    
+    closeTooltip = window.setTimeout(function() {
+        popup.setContent(content);
+        if (!popup._map) popup.openOn(map);
+    }, 100);
 
 }
 
