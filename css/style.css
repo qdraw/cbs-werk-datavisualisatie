@@ -109,6 +109,9 @@ h3{
 .sources h2 {
     margin-top: 15px;
 }
+.sources a {
+    color: black;
+}
 
 #intro .head,
 #intro .content {
