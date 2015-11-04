@@ -168,7 +168,7 @@ h3{
 #metro .l2{
     z-index: 1;
     position:absolute; 
-    background-color: rgba(0,0,10,0.9);
+    background-color: rgba(100,115,140,0.8);
 }
 #metro .l1{
     top:50px; 
