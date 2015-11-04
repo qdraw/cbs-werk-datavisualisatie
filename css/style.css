@@ -175,7 +175,7 @@ h3{
     position:absolute; 
     top:0px; 
     left:0; 
-    background-color: #5189B2;
+    background-color: white;
     width: 27vw;
     height: 100vh;
     font-size: 13px;
@@ -186,8 +186,9 @@ h3{
 
 #sidebar #header {
     margin-top: 65px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-top: calc( 22vh + 65px );
+    margin-left: 45px;
+    margin-right: 45px;
 }
 @media (max-width: 1270px) {
     #sidebar #header {
@@ -200,15 +201,19 @@ h3{
 
 #sidebar #content {
     margin-top: 15px;
-    margin-left: 5px;
+    margin-left: 45px;
+    margin-right: 45px;
 }
 #sidebar #content .image {
     display: block;
     height: 22vh;
     width: 25vw;
-    width: calc( 27vw - 10px );
+    width: calc( 27vw - 0px );
     background-size: cover;
     background-position: center;
+    top: 45px;
+    left: 0px;
+    position: absolute;
 }
 @media (max-height: 638px) and (min-width: 1270px){
     #sidebar #content .image {
@@ -231,24 +236,26 @@ path {
 #sidebar #legenda {
     position: absolute;
     bottom: 5px;
-    margin-left: 5px;
-
+    margin-left: 45px;
 }
 
 #sidebar #legenda div {
-    width: 3vw;
+    width: 2.75vw;
+    margin-left: 0px;
     height: 20px;
     display: inline-block;
+    float: left;
 }
 
 @media (max-width: 1270px) {
     #sidebar #legenda div {
-        width: 2.8vw;
+        width: 2.5vw;
     }
 }
 
 #sidebar #legenda span {
-    width: 47%;
+    width: 42%;
+    margin-right: 18px;
 }
 /*#legenda { 
 

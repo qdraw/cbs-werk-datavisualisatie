@@ -350,21 +350,21 @@ function legenda (name) {
 
 
 	if (variablesIsHighToLow[name]) {
-		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>";
+		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Hoger</span>        <span style='float:left; text-align:right'>Lager</span>";
 
-		for (var i = 0; i < hues.length-2; i++) {
-			// console.log(hues[i])
-			$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-		};
-
-		// for (var i = hues.length-2; i > 0; i--) {
-		//     $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+		// for (var i = 0; i < hues.length-2; i++) {
+		// 	// console.log(hues[i])
+		// 	$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
 		// };
+
+		for (var i = hues.length-3; i > -1; i--) {
+		    $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+		};
 
 
 	}
 	else {
-		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>";
+		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Lager</span>        <span style='float:left; text-align:right'>Hoger</span>";
 
 		for (var i = 0; i < hues.length-2; i++) {
 			// console.log(hues[i])
@@ -454,6 +454,7 @@ function hidePreloader () {
 function bestCountry (name) {
 	// Show in the div the best country
 
+
 	if (variablesIsHighToLow[name]) {
 		// max is best
 		// document.querySelector("#sidebar #content").innerHTML = "<h2>" +  + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  "ranges == " +  + "De Gini-coëfficiënt is berekend als een ratio van gebieden in de Lorenz-curve-grafiek. De Lorenz-curve tekent de proportie van het totale inkomen van een populatie (y-as) ten opzichte van de cumulatieve inkomsten van de onderste x% van de bevolking.";
@@ -463,6 +464,20 @@ function bestCountry (name) {
 
 		document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].maxname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  legendascoreExport;
 
+
+        euLayer.eachLayer(function(layer) {
+            if (layer.feature.properties.name === ranges[name].maxname) {
+                // console.log(ranges[name].maxname)
+
+                layer.setStyle({
+                    weight: 4,
+                    color: '#666'
+                });
+            
+            };
+        });
+
+
 	}
 	else {
 		// min is best
@@ -470,6 +485,17 @@ function bestCountry (name) {
 		legendascoreExport = filterReplace (legendascoreExport,ranges[name].min,countrynames[ranges[name].minname])
 
 		document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].minname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].minname + ".jpg)'></div> " +  legendascoreExport;
+
+        euLayer.eachLayer(function(layer) {
+            if (layer.feature.properties.name === ranges[name].minname) {
+
+                layer.setStyle({
+                    weight: 4,
+                    color: '#666'
+                });
+                // console.log(ranges[name].minname)
+            };
+        });
 	}
 
 }
@@ -478,7 +504,7 @@ function bestCountry (name) {
 
 /// Metro === the menu behind the hamburger
 
-var isMetroOn = true;
+var isMetroOn = false;
 
 function metroMode () {
 	if (isMetroOn == true) {
@@ -525,7 +551,7 @@ setTimeout(function () {
 },500)
 
 
-var isIntroOn = true;
+var isIntroOn = false;
 function introMode() {
 
 	if (isIntroOn) {
@@ -545,7 +571,7 @@ function introMode() {
 		});
 
 
-		$( "#intro" ).fadeOut( 3000, function() {  
+		$( "#intro" ).fadeOut( 1500, function() {  
 			$( "#intro").css("display", "none" );
 			$( "#intro #bg-video" ).remove();
 		});
@@ -803,7 +829,7 @@ function filterCountry(e,those,name) {
 		layer.setStyle({
 			fillColor: color,
 			fillOpacity: 0.8,
-			color: '#6f66',
+			color: '#666',
 			weight: borderwidth
 		});
 
