@@ -384,34 +384,16 @@ function joinData(data, layer) {
 
 function legenda (name) {
 
+	document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Beter</span>        <span style='float:left; text-align:right'>Slechter</span>";
+	for (var i = 0; i < hues.length-2; i++) {
+		// console.log(hues[i])
+		$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+	};
 
-	if (variablesIsHighToLow[name]) {
-		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Hoger</span>        <span style='float:left; text-align:right'>Lager</span>";
-
-		// for (var i = 0; i < hues.length-2; i++) {
-		// 	// console.log(hues[i])
-		// 	$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-		// };
-
-		for (var i = hues.length-3; i > -1; i--) {
-			$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-		};
-
-
-	}
-	else {
-		document.querySelector("#sidebar #legenda").innerHTML = "   <h2> Legenda </h2>   <span style='float:left'>Lager</span>        <span style='float:left; text-align:right'>Hoger</span>";
-
-		for (var i = 0; i < hues.length-2; i++) {
-			// console.log(hues[i])
-			$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
-		};
-
-	}
-
-
-
-
+	// if (variablesIsHighToLow[name]) {
+	// }
+	// else {
+	// }
 }
 
 
