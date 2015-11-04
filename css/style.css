@@ -90,6 +90,7 @@ h3{
     border-radius:5px;
     cursor: pointer;
     color: white;
+    text-decoration: none;
 }
 
 #map {
@@ -99,6 +100,15 @@ h3{
     height: 100vh;
 }
 
+.sources {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.sources h1,
+.sources h2 {
+    margin-top: 15px;
+}
 
 #intro .head,
 #intro .content {
@@ -277,6 +287,8 @@ path {
     font-size: 13px;
     line-height: 1.4;
 }
+
+
 @media (max-width: 1325px){
     #sidebar {
         width: 350px;
@@ -286,10 +298,11 @@ path {
 
 #sidebar #header {
     margin-top: 65px;
-    margin-top: calc( 22vh + 65px );
+    margin-top: calc( 22vh + 70px );
     margin-left: 45px;
     margin-right: 45px;
 }
+
 @media (max-width: 1270px) {
     #sidebar #header {
         margin-top: 100px;
@@ -298,14 +311,17 @@ path {
 
 @media (max-height: 700px) and (min-width: 1270px){
     #sidebar #header {
-        margin-top: 65px;
+        margin-top: 90px;
     }
 }
 @media (max-width: 1360px){
     #sidebar #header {
-        margin-top: 65px;
+        margin-top: 90px;
     }
 }
+
+
+
 
 #sidebar #content {
     margin-top: 35px;
@@ -331,24 +347,21 @@ path {
 }
 
 @media (max-height: 750px) and (min-width: 1270px){
-    #sidebar #header {
-        margin-top: 10px;
-    }
     #sidebar #content .image {
         display: none;
     }
 }
 @media (max-width: 1360px){
-    #sidebar #header {
-        margin-top: 10px;
-    }
-
     #sidebar #content .image {
         display: none;
     }
 }
 
 @media (max-height: 550px) {
+    #sidebar #header {
+        margin-top: 10px;
+    }
+
     #sidebar .container{
         overflow-y: scroll;
         height: 80vh;
