@@ -87,7 +87,7 @@
 	   Wat vind jij het belangrijkste, op zoek naar een nieuw land?
 	</h1>
 	<p class="content">
-		Op dit moment vindt er een enorme immigratiestroom plaats in Europa. Elke dag komen honderden mensen uit verschillende landen Europa binnen in de hoop op een betere toekomst. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jou past. Wat vind jij belangrijk om een beter leven op te kunnen bouwen? Kortom: Welk land past het beste bij jou? 
+		Op dit moment vindt er een enorme immigratiestroom plaats in Europa. Elke dag komen honderden mensen uit verschillende landen Europa binnen in de hoop op een betere toekomst. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? 
 	</p>
 </div>
 
@@ -100,7 +100,10 @@
 	<h1 class="head">
 		Wat vind jij het belangrijkste dat een land kan bieden aan zijn inwoners?
 	</h1>
-	<div class="content"></div>
+	<div class="container">
+		<div class="content"></div>
+	</div>
+	
 </div>
 
 <div id="sidebar">
@@ -537,11 +540,29 @@ var isMetroOn = true;
 function hideMetro () {
 	if (isMetroOn == true) {
 		isMetroOn = false;
+
+		$( "#sidebar #content").css("display", "none" );
+		$( "#sidebar #header").css("display", "none" );
+
+
+		$( "#sidebar").css("backgroundColor", "rgba(0,0,0,0)" );
+
+
 	}
 	else if (isMetroOn == false) {
 		$( "#metro" ).fadeOut( 1000, function() {  
 			$( "#metro").css("display", "none" );
 		});
+
+		$( "#sidebar #content" ).fadeIn( 1000, function() {  
+		});
+
+		$( "#sidebar #header" ).fadeIn( 1000, function() {  
+		});		
+
+		$( "#sidebar").css("backgroundColor", "white" );
+
+
 	}
 }
 
