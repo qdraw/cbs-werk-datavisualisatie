@@ -66,7 +66,7 @@ h3{
     width: 100vw;
     height: 100vh;
     background-color: rgba(81,137,178,0.9);
-    z-index:2;
+    z-index:3;
 }
 #intro .head,
 #intro .content{
@@ -97,19 +97,10 @@ h3{
     width: 100vw;
     height: 100vh;
 }
-#variablesButton {
-    z-index: 1;
-    position:absolute; 
-    top:0px; 
-    left:0px; 
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255,255,255,0.9);
-}
+
 
 #intro .head,
-#intro .content,
-#variablesButton .head {
+#intro .content {
     margin-left: auto;
     margin-right: auto;
     max-width: 1000px;
@@ -132,7 +123,6 @@ h3{
 }
 
 
-#variablesButton .head,
 #intro .head {
     margin-top: 30vh;
 }
@@ -147,7 +137,7 @@ h3{
 }
 
 
-#variablesButton li {
+/*#variablesButton li {
     display: inline-block; 
     padding: 4px;
     cursor: pointer;
@@ -169,6 +159,110 @@ h3{
 #variablesButton li span{
     float: right;
     margin-left: 5px;
+}*/
+
+
+
+#metro .l1,
+#metro .l2{
+    z-index: 1;
+    position:absolute; 
+    background-color: rgba(0,0,10,0.9);
+}
+#metro .l1{
+    top:50px; 
+    left:0px;
+    height: calc( 100vh - 50px );
+    width: 100%;
+}
+#metro .l2{
+    top:0px; 
+    left:27vw;
+    width: 73vw;
+    height: 50px;
+}
+@media (max-width: 1325px){
+    #metro .l2{
+        top: 0px; 
+        left: 350px;
+        width: calc( 100vw - 350px );
+        height: 50px;
+    }
+}
+
+#metro .head{
+    z-index: 2;
+    position: absolute;
+    top: 23vh;
+    left: 23vw;
+    color: white;
+}
+
+@media (max-width: 1325px){
+    #metro .head{
+        left: 10vw;
+    }
+}
+
+
+
+#metro .content {
+    z-index: 2;
+    position: absolute;
+    top: 30vh;
+    left: 25vw;
+    max-width: 960px;
+}
+
+@media (max-width: 1325px){
+    #metro .content{
+        left: 10vw;
+    }
+}
+
+
+#metro .content li {
+    float: left;
+    list-style: none;
+    width: 23%;
+    display: inline-block; 
+    padding: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+    transition: all 1s ease;
+    height: 135px;
+}
+#metro .content li:hover {
+    background-color: #64738C;
+}
+
+#metro .content li img {
+    display: block; 
+    margin-top: 0px;
+    width: 100px;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    filter: invert(100%);
+    margin-bottom: 5px;
+}
+
+
+#metro .content li span{
+    display: block; 
+    text-align: center;
+    margin-left: 5px;
+}
+
+
+
+
+/* Do a fancy data transition for browsers that support it */
+path {
+  -webkit-transition:fill 800ms;
+          transition:fill 800ms;
 }
 
 #sidebar {
@@ -181,7 +275,11 @@ h3{
     font-size: 13px;
     line-height: 1.4;
 }
-
+@media (max-width: 1325px){
+    #sidebar {
+        width: 350px;
+    }   
+}
 
 
 #sidebar #header {
@@ -196,13 +294,22 @@ h3{
     }
 }
 
-
-
+@media (max-height: 700px) and (min-width: 1270px){
+    #sidebar #header {
+        margin-top: 65px;
+    }
+}
+@media (max-width: 1360px){
+    #sidebar #header {
+        margin-top: 65px;
+    }
+}
 
 #sidebar #content {
-    margin-top: 15px;
-    margin-left: 45px;
-    margin-right: 45px;
+    margin-top: 20px;
+    padding-left: 45px;
+    padding-right: 45px;
+    border-top: 1px solid #ccc;
 }
 #sidebar #content .image {
     display: block;
@@ -211,32 +318,32 @@ h3{
     width: calc( 27vw - 0px );
     background-size: cover;
     background-position: center;
-    top: 45px;
+    top: 50px;
     left: 0px;
     position: absolute;
 }
-@media (max-height: 638px) and (min-width: 1270px){
+
+@media (max-height: 700px) and (min-width: 1270px){
     #sidebar #content .image {
-        height: 10vh;
+        display: none;
     }
 }
-@media (max-height: 560px) and (min-width: 1270px){
+@media (max-width: 1360px){
     #sidebar #content .image {
         display: none;
     }
 }
 
 
-/* Do a fancy data transition for browsers that support it */
-path {
-  -webkit-transition:fill 800ms;
-          transition:fill 800ms;
-  }
+
+
 
 #sidebar #legenda {
     position: absolute;
     bottom: 5px;
-    margin-left: 45px;
+    padding-left: 45px;
+    border-top: 1px solid #ccc;
+
 }
 
 #sidebar #legenda div {
@@ -247,42 +354,38 @@ path {
     float: left;
 }
 
-@media (max-width: 1270px) {
+@media (max-width: 1360px) {
     #sidebar #legenda div {
-        width: 2.5vw;
+        width: 35px;
     }
 }
+
+
 
 #sidebar #legenda span {
     width: 42%;
     margin-right: 18px;
 }
-/*#legenda { 
-
-    text-align: right;
-    left:0; 
-    width:214px; 
-    width: 22vw;
-
-}*/
-
-/*#legenda .bestcountry {
-    background-color: rgba(113,160,191,0.5);
-    height: 50vh;
+#sidebar #menu {
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
 }
-#legenda .hovercontent {
-    background-color: rgba(255,96,0,0.5); /* FF6000 */ /*
-    height: 50vh;
+
+#sidebar #menu li{
+    cursor: pointer;
+    list-style: none;
+    float: left;
+    width: 50px;
+    height: 50px;
+    background-size: 40px 40px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transition: all 1s ease;
 }
-*/
-/*#legenda img {
-    width: 214px;
-    width: 18vw;
+#sidebar #menu li:hover {
+    background-color: #64738C!important;
 }
-*/
-
-
-
 
 
 
@@ -344,10 +447,6 @@ leaflet-popup-content {
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
     background-size: cover; 
-}
-
-.leaflet-container {
-    background-color:rgba(255,0,0,0.0);
 }
 
 

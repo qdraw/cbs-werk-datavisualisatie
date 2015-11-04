@@ -63,28 +63,30 @@
 	</video>
 
 	<h1 class="head">
-	Wat vind jij het belangrijkste, op zoek naar een nieuw land?
+	   Wat vind jij het belangrijkste, op zoek naar een nieuw land?
 	</h1>
-	<p class="content">Op dit moment vindt er een enorme immigratiestroom plaats in Europa. Elke dag komen honderden mensen uit verschillende landen Europa binnen in de hoop op een betere toekomst. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? 
-
-	Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jou past. Wat vind jij belangrijk om een beter leven op te kunnen bouwen? Kortom: Welk land past het beste bij jou? </p>
+	<p class="content">
+		Op dit moment vindt er een enorme immigratiestroom plaats in Europa. Elke dag komen honderden mensen uit verschillende landen Europa binnen in de hoop op een betere toekomst. Maar in welk land kan deze 'hoop op een beter toekomst' werkelijkheid worden? Wat is het belangrijkste dat in land kan bieden aan zijn burgers? En wat vind jij het belangrijkste op zoek naar een nieuw land? Binnen deze visualisatie kun jij op zoek gaan naar het land wat het beste bij jou past. Wat vind jij belangrijk om een beter leven op te kunnen bouwen? Kortom: Welk land past het beste bij jou? 
+	</p>
 </div>
 
 <div id="map"></div>
 
-<div id="variablesButton">
-	<h1 class="head">    Wat vind jij het belangrijkste dat een land kan bieden aan zijn inwoners?
+<div id="metro">
+	<div class="l1"></div>
+	<div class="l2"></div>
+
+	<h1 class="head">
+		Wat vind jij het belangrijkste dat een land kan bieden aan zijn inwoners?
 	</h1>
 	<div class="content"></div>
 </div>
 
 <div id="sidebar">
+	<div id="menu"></div>
 	<div id="header"></div>
-	<div id="content">
-	</div>
-
-	<div id="legenda">
-	</div>
+	<div id="content"></div>
+	<div id="legenda"></div>
 </div>
 
 
@@ -217,9 +219,17 @@ var variablesExplain = {
 
 
 
-// Display all options in 1 div
+
+
+
+// #sidebar #menu
 for (var i = 0; i < variables.length; i++) {
-	document.querySelector("#variablesButton .content").innerHTML += "<li onclick='setVariable(\"" + variables[i]  + "\")' class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /><span>" + variablesUI[i] +"</span> </li>";
+	document.querySelector("#sidebar #menu").innerHTML += "<li onclick='setVariable(\"" + variables[i]  + "\")' class='" + variables[i]+ "' style='background-image:url(images/" + variables[i] + ".svg)'> </li>";
+}
+
+// Display all options in 1 div #metro .content
+for (var i = 0; i < variables.length; i++) {
+	document.querySelector("#metro .content").innerHTML += "<li onclick='setVariable(\"" + variables[i]  + "\")' class='" + variables[i]+ "'> <img src='images/"  + variables[i] + ".svg' /><span>" + variablesUI[i] +"</span> </li>";
 }
 
 
@@ -358,7 +368,7 @@ function legenda (name) {
 		// };
 
 		for (var i = hues.length-3; i > -1; i--) {
-		    $( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
+			$( "#sidebar #legenda" ).append( "  <div style='background-color:" + hues[i] +"'></div>" );
 		};
 
 
@@ -437,11 +447,11 @@ function setVariable(name) {
 		layer.addEventListener("click", function(e){ var those = this; filterCountry(e,those,name) }, false);
 
 	});
-
+	
+	hideMetro()
 	legenda (name)
 	bestCountry (name)
-	setColorOfVariablesButton (name)
-	metroMode ()
+	setActiveMenu (name)
 	displayCurrentType (name)
 	hidePreloader()
 }
@@ -465,17 +475,17 @@ function bestCountry (name) {
 		document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].maxname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].maxname + ".jpg)'></div> " +  legendascoreExport;
 
 
-        euLayer.eachLayer(function(layer) {
-            if (layer.feature.properties.name === ranges[name].maxname) {
-                // console.log(ranges[name].maxname)
+		euLayer.eachLayer(function(layer) {
+			if (layer.feature.properties.name === ranges[name].maxname) {
+				// console.log(ranges[name].maxname)
 
-                layer.setStyle({
-                    weight: 4,
-                    color: '#666'
-                });
-            
-            };
-        });
+				layer.setStyle({
+					weight: 4,
+					color: '#666'
+				});
+			
+			};
+		});
 
 
 	}
@@ -486,64 +496,32 @@ function bestCountry (name) {
 
 		document.querySelector("#sidebar #content").innerHTML = "<h2>" + countrynames[ranges[name].minname] + "</h2>" + "<div class='image' style='background-image:url(images/" + ranges[name].minname + ".jpg)'></div> " +  legendascoreExport;
 
-        euLayer.eachLayer(function(layer) {
-            if (layer.feature.properties.name === ranges[name].minname) {
+		euLayer.eachLayer(function(layer) {
+			if (layer.feature.properties.name === ranges[name].minname) {
 
-                layer.setStyle({
-                    weight: 4,
-                    color: '#666'
-                });
-                // console.log(ranges[name].minname)
-            };
-        });
+				layer.setStyle({
+					weight: 4,
+					color: '#666'
+				});
+				// console.log(ranges[name].minname)
+			};
+		});
 	}
 
 }
 
 
-
-/// Metro === the menu behind the hamburger
-
 var isMetroOn = true;
 
-function metroMode () {
+function hideMetro () {
 	if (isMetroOn == true) {
-		$( "#variablesButton").css("width", "100vw" );
-		$( "#variablesButton").css("height", "100vh" );
-
-
-		$( "#variablesButton .content").css("margin-left", "auto" )
-		$( "#variablesButton .content").css("margin-right", "auto" )
-		$( "#variablesButton .content").css("max-width", "1000px" )
-		$( "#variablesButton .content li").css("width", "120px" )
-		$( "#variablesButton .content li").css("margin-right", "10px" )
-		$( "#variablesButton .content").css("margin-top", "30px" )
-
-
 		isMetroOn = false;
 	}
-	else {
-
-		$( "#variablesButton .head").css("display", "none" );
-		$( "#variablesButton .content").css("width", "inherit" )
-
-		$( "#variablesButton .content li").css("width", "37px" )
-
-		$( "#variablesButton .content li").css("margin-right", "0px" )
-
-		$( "#variablesButton .content").css("margin-top", "0px" )
-
-
-		$( "#variablesButton").css("width", "27vw" );
-		$( "#variablesButton").css("height", "48px" );
-		$( "#variablesButton .content img").css("height", "37px" );
-		$( "#variablesButton .content img").css("width", "37px" );
-		$( "#variablesButton .content span").css("display", "none" );
-
-		// dont enable metro again
+	else if (isMetroOn == false) {
+		$( "#metro" ).fadeOut( 1000, function() {  
+			$( "#metro").css("display", "none" );
+		});
 	}
-
-
 }
 
 setTimeout(function () {
@@ -573,10 +551,10 @@ function introMode() {
 
 		$( "#intro" ).fadeOut( 1500, function() {  
 			$( "#intro").css("display", "none" );
-            var isFF = !!window.sidebar;
-            if (isFF) {
-                $( "#intro #bg-video" ).remove();
-            };
+			var isFF = 'MozAppearance' in document.documentElement.style;
+			if (isFF) {
+				$( "#intro #bg-video" ).remove();
+			};
 		});
 		
 	}
@@ -595,23 +573,36 @@ function displayCurrentType (name) {
 }
 
 
-// In the MEtro interface
-function setColorOfVariablesButton (name) {
 
-	// $( "#variablesButton .content" ).each(function() {
-	//     $( this ).css( "backgroundColor", "white" );
-	// });
+// In the #sidebar #menu interface
+function setActiveMenu (name) {
 
-
-	$('#variablesButton .content').children('li').each(function () {
+	$('#sidebar #menu').children('li').each(function () {
 		$( this ).css( "backgroundColor", "white" );
 		// alert(this.value); // "this" is the current element in the loop
 	});
 
-	$( "#variablesButton .content " + " ." + name).css("backgroundColor", "#64738C" ); //blue
-
-
+	$( "#sidebar #menu " + " ." + name).css("backgroundColor", "#64738C" ); //blue
 }
+
+
+// // In the MEtro interface
+// function setColorOfVariablesButton (name) {
+
+// 	// $( "#variablesButton .content" ).each(function() {
+// 	//     $( this ).css( "backgroundColor", "white" );
+// 	// });
+
+
+// 	$('#variablesButton .content').children('li').each(function () {
+// 		$( this ).css( "backgroundColor", "white" );
+// 		// alert(this.value); // "this" is the current element in the loop
+// 	});
+
+// 	$( "#variablesButton .content " + " ." + name).css("backgroundColor", "#64738C" ); //blue
+
+
+// }
 
 // Caled by the eventlistener mouseout
 function resetHighlight(e,those) {
@@ -912,11 +903,11 @@ function mousemove(e,those,name) {
 	// }, 200);
 
 
-    
-    closeTooltip = window.setTimeout(function() {
-        popup.setContent(content);
-        if (!popup._map) popup.openOn(map);
-    }, 100);
+	
+	closeTooltip = window.setTimeout(function() {
+		popup.setContent(content);
+		if (!popup._map) popup.openOn(map);
+	}, 100);
 
 }
 
@@ -924,9 +915,9 @@ function mousemove(e,those,name) {
 function mouseout(e) {
 
 
-    closeTooltip = window.setTimeout(function() {
-        map.closePopup();
-    }, 100);
+	closeTooltip = window.setTimeout(function() {
+		map.closePopup();
+	}, 100);
 
 
 	var layer = e.target;
