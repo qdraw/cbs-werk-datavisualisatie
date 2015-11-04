@@ -504,7 +504,7 @@ function bestCountry (name) {
 
 /// Metro === the menu behind the hamburger
 
-var isMetroOn = false;
+var isMetroOn = true;
 
 function metroMode () {
 	if (isMetroOn == true) {
@@ -551,7 +551,7 @@ setTimeout(function () {
 },500)
 
 
-var isIntroOn = false;
+var isIntroOn = true;
 function introMode() {
 
 	if (isIntroOn) {
@@ -605,7 +605,7 @@ function setColorOfVariablesButton (name) {
 		// alert(this.value); // "this" is the current element in the loop
 	});
 
-	$( "#variablesButton .content " + " ." + name).css("backgroundColor", "red" ); //blue
+	$( "#variablesButton .content " + " ." + name).css("backgroundColor", "#64738C" ); //blue
 
 
 }
@@ -840,7 +840,7 @@ function filterCountry(e,those,name) {
 
 // The popup feature
 
-var timer;
+var closeTooltip;
 
 function mousemove(e,those,name) {
 	// https://www.mapbox.com/mapbox.js/example/v1.0.0/choropleth/
@@ -901,16 +901,28 @@ function mousemove(e,those,name) {
 
 	// };
 
-	timer = window.setTimeout(function() {
-		popup.setContent(content);
+	// timer = window.setTimeout(function() {
+	// 	popup.setContent(content);
 
-		if (!popup._map) popup.openOn(map);
+	// 	if (!popup._map) popup.openOn(map);
 
-	}, 200);
+	// }, 200);
+
+    popup.setContent(content);
+    if (!popup._map) popup.openOn(map);
+    window.clearTimeout(closeTooltip);
+
 }
 
 
 function mouseout(e) {
+
+
+    closeTooltip = window.setTimeout(function() {
+        map.closePopup();
+    }, 100);
+
+
 	var layer = e.target;
 
 	layer.setStyle({
