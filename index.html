@@ -127,6 +127,7 @@
 </div>
 
 <div id="sidebar">
+	<div class="hamburger"></div>
 	<div id="menu"></div>
 	<div class="container">
 		<div id="header"></div>
@@ -141,9 +142,11 @@
 // L.mapbox.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ';
 // Replace 'mapbox.streets' with your map id.
 var mapboxTiles = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-base/{z}/{x}/{y}.png' , {
+	minZoom: 2,
 	maxZoom: 19,
+	subdomains: '0123',
 	opacity: 0.3,
-	attribution: '<a href="sources.html" target="_blank">Bronvermelding</a>'
+	attribution: '<a class="sourcelink" href="sources.html" target="_blank">Bronvermelding</a>'
 });
 
 
@@ -955,6 +958,36 @@ function mouseout(e) {
 		fillOpacity: 0.8,
 		color: '#666'
 	});
+}
+
+
+
+toggleHamburgerButton ();
+function toggleHamburgerButton () {
+	document.querySelector("#sidebar .hamburger").addEventListener("click", function(e){ var those = this; toggleHamburger(e,those) }, false);
+}
+var isHamburgerMenuOn = true;
+function toggleHamburger (e,those) {
+	if (isHamburgerMenuOn) {
+		$("#sidebar").css("backgroundColor", "rgba(0,0,0,0)")
+		$("#sidebar #menu").css("display", "none")
+		$("#sidebar .container").css("display", "none")
+		$("#sidebar #legenda").css("display", "none")
+
+		$( "#sidebar").css("height", "50px" );
+
+		isHamburgerMenuOn = false;
+	}
+	else {
+		$("#sidebar").css("backgroundColor", "white")
+		$("#sidebar #menu").css("display", "block")
+		$("#sidebar .container").css("display", "block")
+		$("#sidebar #legenda").css("display", "block")
+		$( "#sidebar").css("height", "100vh" );
+
+		isHamburgerMenuOn = true;
+	}
+
 }
 
 
