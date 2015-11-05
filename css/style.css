@@ -23,6 +23,8 @@ body {
     left:48%; 
     z-index:100;
     filter: invert(100%);
+    -webkit-filter: invert(100%);
+
 }
 
 p,
@@ -298,6 +300,7 @@ h3{
     margin-left: auto;
     margin-right: auto;
     filter: invert(100%);
+    -webkit-filter: invert(100%);
     margin-bottom: 5px;
 }
 
