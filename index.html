@@ -600,10 +600,7 @@ function introMode() {
 
 		$( "#intro" ).fadeOut( 1500, function() {  
 			$( "#intro").css("display", "none" );
-			var isFF = 'MozAppearance' in document.documentElement.style;
-			if (isFF) {
-				$( "#intro #bg-video" ).remove();
-			};
+			$( "#intro #bg-video" ).remove();
 		});
 		
 	}
@@ -990,6 +987,25 @@ function toggleHamburger (e,those) {
 
 }
 
+
+function pageFail (e) {
+
+	var para = document.createElement("div");
+	para.id = "warning"
+	var node = document.createTextNode(" ");
+	para.appendChild(node);
+
+	document.body.appendChild(para);
+  	
+  	document.getElementById("warning").innerHTML = '<h2 style="color:black;">Sorry, maar met jouw versie van Internet Explorer kan mijn site niet samenwerken. Het handigste is dat je Firefox of Chrome installeerd. </h2><p style="color:black;"> Mocht u vragen hebben neem dan contact op met Dion van Velde via: ' + '&#100;'  + '&#105;' + '&#111;' + '&#110;' + '&#64;' + '&#113;' + '&#100;' + '&#114;' + '&#97;' + '&#119;' + '&#46;' + '&#110;' + '&#108;' + '</p> <a href="https://www.google.com/chrome/browser/desktop/index.html" class="button" style="color:white">Download Google Chrome</a> <a class="button" href="https://www.mozilla.org/nl/firefox/new/" style="color:white">Download Firefox</a>'   
+
+}//e/pageFail
+
+
+// for IE10 and lower == unsuported
+if(document.all && document.compatMode) {
+	pageFail ("noie")
+}
 
 </script>
 
